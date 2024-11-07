@@ -2,7 +2,6 @@
 
 - [TypeScript React Package with react-hook-form and MUI 5](https://claude.ai/chat/9db6d8f4-faad-496e-b307-73b99f62e1a0)
 
-
 ```shell
 $ cd $ my-react-form-package
 $ npm link
@@ -42,12 +41,10 @@ Uncaught runtime errors:
 ERROR
 dispatcher is null
 
+## in case of force update use
 
-npm cache clean --force
-rm -rf node_modules
-npm install
-
-
-
-
-FUCK THE TRICK IS USING YALC, seems that the problem is in LINK and npm i ../package :(
+```shell
+$ npm cache clean --force
+$ rm -rf node_modules
+$ npm install
+```
