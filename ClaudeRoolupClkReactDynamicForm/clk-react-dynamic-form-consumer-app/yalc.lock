@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "packages": {
+    "clk-react-dynamic-form": {
+      "signature": "a5c343676c16bc1ec2829cbf02f4eece",
+      "file": true
+    },
+    "my-react-form-package": {
+      "signature": "b11d420c82c1c0cdbd1f107053d00997",
+      "file": true
+    }
+  }
+}

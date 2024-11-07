@@ -1,0 +1,24 @@
+{
+  "name": "clk-react-dynamic-form",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build:publish:push": "clear && npm run build && yalc publish && yalc push",
+    "build": "clear && rollup -c",
+    "watch": "clear && rollup -c -w",
+    "patch": "npm version patch",
+    "pub": "npm run build && npm publish --access public"
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11.x",
+    "@emotion/styled": "^11.x",
+    "@mui/material": "^5.x",
+    "react": "^18.x",
+    "react-dom": "^18.x",
+    "react-hook-form": "^7.x"
+  },
+  "yalcSig": "a5c343676c16bc1ec2829cbf02f4eece"
+}

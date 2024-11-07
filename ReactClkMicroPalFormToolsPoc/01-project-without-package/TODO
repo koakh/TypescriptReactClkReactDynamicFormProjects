@@ -1,0 +1,73 @@
+Project:
+  Frontend:
+    ☐ required property, validate only works if element as value and as validation
+  Backend:
+    ☐ 
+
+
+
+options com other, query no array
+
+required, só valida se o required true
+
+on submit global validation and show error
+
+form.width and height, to not resize    
+
+i18n and check if i18n Path have valid string, else don't show, or use for ex "gen i18n path", if i18n empty Will BE undefined on compo and don't show it, label for ex must me required    
+
+quiz form com radios e selecition, a mais tem as respostas certas, e sem rádios......com texto fields e textareas
+
+Apply validation
+  https://www.react-hook-form.com/get-started/#Applyvalidation
+
+    validationRules
+      required
+      min
+      max
+      minLength
+      maxLength
+      pattern
+      validate
+
+      <input {...register("firstName", { required: true, maxLength: 20 })} />
+      <input {...register("lastName", { pattern: /^[A-Za-z]+$/i })} />
+      <input type="number" {...register("age", { min: 18, max: 99 })} />
+
+      "required": true,
+      "validation": [
+        {
+          "positiveNumber": "(value) => parseFloat(value) > 0",
+          "errorMessage": "Your age must be greater than zero"
+        },
+        {
+          "lessThanHundred": "(value) => parseFloat(value) < 200",
+          "errorMessage": "Your age must be less than 200"
+        }
+      ],
+
+
+error messages
+  https://www.react-hook-form.com/api/useform/register      
+  ex 
+  required
+    string |
+    {
+      value: boolean,
+      message: string
+    }
+
+    maxLength
+    {
+      value: number,
+      message: string
+    }    
+
+https://mui.com/material-ui/react-text-field/#multiline
+The multiline prop transforms the text field into a TextareaAutosize element. Unless the rows prop is set, the height of the text field dynamically matches its content (using TextareaAutosize). You can use the minRows and maxRows props to bound i
+
+
+
+spread element props, ex 
+  fullWidth variant="standard" color="warning" focused
+

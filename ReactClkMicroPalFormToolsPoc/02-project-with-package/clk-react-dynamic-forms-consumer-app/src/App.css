@@ -1,0 +1,43 @@
+html * {
+  font-size: 1em !important;
+  font-family: "Roboto", sans-serif !important;
+}
+
+body {
+  background-color: #474756;
+}
+
+.App {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.main-container {
+  border: 1px solid #888;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: white;
+}
+
+.form-element {
+  margin-bottom: 1.0rem;
+}
+
+.form-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.form-button:hover {
+  background-color: #0056b3;
+}
+
+.form-button.disabled {
+  opacity: 50%;
+  cursor: not-allowed;
+}

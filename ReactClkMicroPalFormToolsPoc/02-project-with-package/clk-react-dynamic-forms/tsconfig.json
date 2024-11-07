@@ -1,0 +1,39 @@
+{
+  // include only the src directory
+  "include": [
+    "src"
+  ],
+  // exclude
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "compilerOptions": {
+    // set the javascript language version for emitted javascript and include compatible library declarations.
+    "target": "es2016",
+    // specify what module code is generated
+// "module": "commonjs",
+"module": "esnext",
+    // generate .d.ts files from typescript and javascript files in your project
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./dist",
+    // emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility
+    "esModuleInterop": true,
+    // ensure that casing is correct in imports
+    "forceConsistentCasingInFileNames": true,
+    // Enable all strict type-checking options
+    "strict": true,
+    // skip type checking all .d.ts files
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "allowJs": false,
+    "moduleResolution": "node",
+    "declarationDir": "dist",
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    // fix '--jsx' is not set.ts(6142)
+// "jsx": "react",
+"jsx": "react-jsx",    
+  }
+}
