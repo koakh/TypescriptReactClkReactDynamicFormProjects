@@ -1,6 +1,6 @@
 import React from 'react';
 import { Control, FieldErrors, FieldValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
-import { DynamicFormElement, ValidationRules } from '../interfaces/dynamic-form.interface';
+import { DynamicForm, DynamicFormElement, ValidationRules } from '../interfaces/dynamic-form.interface';
 /**
  * get react hook form validation object
  * @param e dynamic form element
@@ -23,4 +23,4 @@ export declare const getValidateErrorMessages: (e: DynamicFormElement, i18nFn: (
 export declare const getValidateErrorNodes: (e: DynamicFormElement, errors: FieldErrors<FieldValues>) => React.ReactNode;
 export declare const getI18nValue: (i18nFn: (input: string, startWith?: string) => string, value: string, defaultValue?: string) => string;
 export declare const getI18nElementValues: (i18nFn: (input: string, startWith?: string) => string, e: DynamicFormElement) => Partial<Pick<DynamicFormElement, "label" | "placeHolder" | "helperText" | "defaultValue">>;
-export declare const generateElement: (e: DynamicFormElement, register: UseFormRegister<FieldValues>, errors: FieldErrors<FieldValues>, control: Control<FieldValues, any>, watch: UseFormWatch<FieldValues>, setValue: UseFormSetValue<FieldValues>, i18nFn: (input: string, startWith?: string) => string) => React.ReactNode;
+export declare const generateElement: (dynamicForm: DynamicForm, e: DynamicFormElement, register: UseFormRegister<FieldValues>, errors: FieldErrors<FieldValues>, control: Control<FieldValues, any>, watch: UseFormWatch<FieldValues>, setValue: UseFormSetValue<FieldValues>, i18nFn: (input: string, startWith?: string) => string) => React.ReactNode;

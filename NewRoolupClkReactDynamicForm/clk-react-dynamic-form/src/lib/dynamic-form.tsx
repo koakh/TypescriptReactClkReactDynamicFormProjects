@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import React from 'react';
 import { Control, Controller, FieldErrors, FieldValues, UseFormRegister, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { DynamicFormElementType } from '../enums';
-import { DynamicFormElement, ValidationRule, ValidationRules } from '../interfaces/dynamic-form.interface';
+import { DynamicForm, DynamicFormElement, ValidationRule, ValidationRules } from '../interfaces/dynamic-form.interface';
 import { parseValidationRules } from '../utils/main';
 import { DynamicTextFieldProps } from '../interfaces';
 import { ControllerRenderProps } from '../interfaces/controller-render-props-field.interface';
@@ -172,6 +172,7 @@ export const getI18nElementValues = (i18nFn: (input: string, startWith?: string)
 };
 
 export const generateElement = (
+  dynamicForm: DynamicForm,
   e: DynamicFormElement,
   register: UseFormRegister<FieldValues>,
   errors: FieldErrors<FieldValues>,
@@ -182,15 +183,15 @@ export const generateElement = (
 ): React.ReactNode => {
   switch (e.type) {
     case DynamicFormElementType.SELECT:
-      return generateInputSelect(e, register, errors, watch, i18nFn);
+      return generateInputSelect(dynamicForm, e, register, errors, watch, i18nFn);
     case DynamicFormElementType.MULTI_SELECT:
-      return generateInputMultiSelect(e, register, errors, watch, setValue, i18nFn);
+      return generateInputMultiSelect(dynamicForm, e, register, errors, watch, setValue, i18nFn);
     case DynamicFormElementType.RADIO:
-      return generateInputRadio(e, errors, control, i18nFn);
+      return generateInputRadio(dynamicForm, e, errors, control, i18nFn);
     case DynamicFormElementType.CHECKBOX:
-      return generateInputCheckBox(e, register, watch, i18nFn);
+      return generateInputCheckBox(dynamicForm, e, register, watch, i18nFn);
     default:
-      return generateInputText(e, register, errors, i18nFn);
+      return generateInputText(dynamicForm, e, register, errors, i18nFn);
   }
 }
 
@@ -212,6 +213,7 @@ const generateInputTextNonMUI = (e: DynamicFormElement, register: UseFormRegiste
 }
 
 const generateInputText = (
+  dynamicForm: DynamicForm,
   e: DynamicFormElement,
   register: UseFormRegister<FieldValues>,
   errors: FieldErrors<FieldValues>,
@@ -226,11 +228,9 @@ const generateInputText = (
   const dynamicAttributesFormControl = e.attributesFormControl ? parseAttributeString(e.attributesFormControl) : undefined;
   // get patternValidation
   let patternValidation = getPatternValidation(e);
-
   // TODO: i18n stuff: put in all elements in 'common element code'
   const i18n = getI18nElementValues(i18nFn, e);
   // console.log(`i18nElementValues: [${JSON.stringify(i18n, undefined, 2)}]`);
-
   // EOF: common element code
 
   return (
@@ -242,10 +242,6 @@ const generateInputText = (
         <TextField
           id={e.key}
           type={e.type}
-          // label={e.label}
-          // placeholder={e.placeHolder}
-          // defaultValue={e.defaultValue}
-          // helperText={errorMessage || e.helperText}
           label={i18n['label']}
           placeholder={i18n['placeHolder']}
           defaultValue={i18n['defaultValue']}
@@ -263,12 +259,15 @@ const generateInputText = (
           })}
           // inject dynamic properties
           {...dynamicAttributes}
+          // inject styles
+          sx={dynamicForm?.properties?.styles?.input}
         />
       </FormControl>
     </div>);
 }
 
 const generateInputSelect = (
+  dynamicForm: DynamicForm,
   e: DynamicFormElement,
   register: UseFormRegister<FieldValues>,
   errors: FieldErrors<FieldValues>,
@@ -283,6 +282,8 @@ const generateInputSelect = (
   const dynamicAttributesFormControl = e.attributesFormControl ? parseAttributeString(e.attributesFormControl) : undefined;
   // get patternValidation
   let patternValidation = getPatternValidation(e);
+  // i18n
+  const i18n = getI18nElementValues(i18nFn, e);
   // EOF: common element code
 
   // get the current value of the select field
@@ -298,10 +299,10 @@ const generateInputSelect = (
         <Select
           id={e.key}
           type={e.type}
-          label={e.label}
-          placeholder={e.placeHolder}
-          defaultValue={e.defaultValue}
-          error={errors[e.key] !== undefined}
+          label={i18n['label']}
+          placeholder={i18n['placeHolder']}
+          defaultValue={i18n['defaultValue']}
+          helperText={errorMessage || i18n['helperText']}
           // register element
           {...register(e.key, {
             required: e.validationRules?.required,
@@ -316,6 +317,8 @@ const generateInputSelect = (
           {...dynamicAttributes}
           // required for reset form works
           value={currentValue}
+          // inject styles
+          sx={dynamicForm?.properties?.styles?.select}
         >
           {Array.isArray(e.options) && e.options?.map((e) => {
             let label = e;
@@ -335,6 +338,7 @@ const generateInputSelect = (
 }
 
 const generateInputMultiSelect = (
+  dynamicForm: DynamicForm,
   e: DynamicFormElement,
   register: UseFormRegister<FieldValues>,
   errors: FieldErrors<FieldValues>,
@@ -350,6 +354,8 @@ const generateInputMultiSelect = (
   const dynamicAttributesFormControl = e.attributesFormControl ? parseAttributeString(e.attributesFormControl) : undefined;
   // get patternValidation
   let patternValidation = getPatternValidation(e);
+  // i18n
+  const i18n = getI18nElementValues(i18nFn, e);
   // EOF: common element code
 
   const ITEM_HEIGHT = 48;
@@ -378,10 +384,11 @@ const generateInputMultiSelect = (
           multiple
           id={e.key}
           type={e.type}
-          label={e.label}
-          placeholder={e.placeHolder}
+          label={i18n['label']}
+          placeholder={i18n['placeHolder']}
           // set the default value here
-          defaultValue={e.defaultValue || []}
+          defaultValue={i18n['defaultValue'] || []}
+          helperText={errorMessage || i18n['helperText']}
           error={errors[e.key] !== undefined}
           // register element
           {...register(e.key, {
@@ -406,6 +413,8 @@ const generateInputMultiSelect = (
             typeof selected === 'string' ? selected.split(',').join(', ') : selected.join(', ')
           )}
           MenuProps={MenuProps}
+          // inject styles
+          sx={dynamicForm?.properties?.styles?.multiSelect}
         >
           {Array.isArray(e.options) && e.options?.map((name) => (
             <MenuItem key={name} value={name.split(':')[0]}>
@@ -421,6 +430,7 @@ const generateInputMultiSelect = (
 };
 
 const generateInputRadio = (
+  dynamicForm: DynamicForm,
   e: DynamicFormElement,
   errors: FieldErrors<FieldValues>,
   control: Control<FieldValues, any>,
@@ -432,6 +442,8 @@ const generateInputRadio = (
   // get dynamicAttributes and dynamicAttributesFormControl
   const dynamicAttributes = e.attributes ? parseAttributeString(e.attributes) : undefined;
   const dynamicAttributesFormControl = e.attributesFormControl ? parseAttributeString(e.attributesFormControl) : undefined;
+  // i18n
+  const i18n = getI18nElementValues(i18nFn, e);
   // EOF: common element code
 
   // NOTE: this must be a react hook form controlled component because of the nature of MUI radio box
@@ -445,7 +457,7 @@ const generateInputRadio = (
         <FormLabel>{e.label}</FormLabel>
         <Controller
           name={e.key}
-          defaultValue={e.defaultValue}
+          defaultValue={i18n['defaultValue']}
           // inject dynamic properties
           {...dynamicAttributes}
           control={control}
@@ -464,6 +476,8 @@ const generateInputRadio = (
               })}
             </RadioGroup>
           )}
+          // inject styles
+          sx={dynamicForm?.properties?.styles?.radio}
         />
         {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{e.helperText}</FormHelperText>}
       </FormControl>
@@ -471,6 +485,7 @@ const generateInputRadio = (
 }
 
 const generateInputCheckBox = (
+  dynamicForm: DynamicForm,
   e: DynamicFormElement,
   register: UseFormRegister<FieldValues>,
   watch: UseFormWatch<FieldValues>,
@@ -480,6 +495,8 @@ const generateInputCheckBox = (
   // get dynamicAttributes and dynamicAttributesFormControl
   const dynamicAttributes = e.attributes ? parseAttributeString(e.attributes) : undefined;
   const dynamicAttributesFormControl = e.attributesFormControl ? parseAttributeString(e.attributesFormControl) : undefined;
+  // i18n
+  const i18n = getI18nElementValues(i18nFn, e);  
   // EOF: common element code
 
   // watch the current value
@@ -506,9 +523,11 @@ const generateInputCheckBox = (
               {...dynamicAttributes}
             />
           }
-          label={e.label}
+          label={i18n['label']}
+          // inject styles
+          sx={dynamicForm?.properties?.styles?.checkBox}
         />
-        {e.helperText && <FormHelperText>{e.helperText}</FormHelperText>}
+        {e.helperText && <FormHelperText>{i18n['helperText']}</FormHelperText>}
       </FormControl>
     </div>
   );

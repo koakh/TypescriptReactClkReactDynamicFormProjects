@@ -1,6 +1,6 @@
 {
   "name": "clk-react-dynamic-form",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -20,5 +20,5 @@
     "react-dom": "^18.x",
     "react-hook-form": "^7.x"
   },
-  "yalcSig": "a5c343676c16bc1ec2829cbf02f4eece"
+  "yalcSig": "5ca9c6301f43fbdf0bf7551bccf55f7b"
 }

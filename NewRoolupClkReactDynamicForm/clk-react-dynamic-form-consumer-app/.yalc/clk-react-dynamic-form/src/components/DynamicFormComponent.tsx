@@ -1,4 +1,4 @@
-import { Alert, Box, Button, FormControl, FormHelperText, Grid, Paper, Stack, styled } from '@mui/material';
+import { Alert, Button, FormControl, FormHelperText, Stack } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { generateElement, getI18nValue } from '../lib/dynamic-form';
@@ -48,7 +48,7 @@ export const DynamicFormComponent: React.FC<Props> = ({ tool, i18nFn, onSubmitHa
 
       return showElement && (
         <div key={e.key}>
-          {generateElement(e, register, errors, control, watch, setValue, i18nFn)}
+          {generateElement(dynamicForm, e, register, errors, control, watch, setValue, i18nFn)}
         </div>
       );
     });
@@ -152,7 +152,7 @@ export const DynamicFormComponent: React.FC<Props> = ({ tool, i18nFn, onSubmitHa
       // onSubmit={handleSubmit(onSubmit, onError)}
       >
         {/* renderFormElements */}
-        {tool?.form && renderFormElements(tool.form/*, initialValues, register, errors*/)}
+        {tool?.form && renderFormElements(tool.form)}
 
         {/* globalErrors display */}
         {globalErrors && Object.keys(globalErrors).length > 0 && (
@@ -181,6 +181,7 @@ export const DynamicFormComponent: React.FC<Props> = ({ tool, i18nFn, onSubmitHa
           {onCloseHandle &&
             <Button variant='contained'
               type="submit"
+              sx={tool?.form?.properties?.styles?.button}
               onClick={(e: React.FormEvent<HTMLButtonElement>) => {
                 e.preventDefault();
                 onCloseHandle();
@@ -192,6 +193,7 @@ export const DynamicFormComponent: React.FC<Props> = ({ tool, i18nFn, onSubmitHa
           {/* reset button */}
           <Button variant='contained'
             type="reset"
+            sx={tool?.form?.properties?.styles?.button}
             // onClick={reset as MouseEventHandler<HTMLButtonElement>}
             onClick={() => {
               // console.log(`tool.form?.elements: [${JSON.stringify(tool.form?.elements, undefined, 2)}]`);
@@ -207,10 +209,10 @@ export const DynamicFormComponent: React.FC<Props> = ({ tool, i18nFn, onSubmitHa
           {/* submit button */}
           <Button variant='contained'
             type="submit"
+            sx={tool?.form?.properties?.styles?.button}
           >
             {getI18nValue(i18nFn, tool?.form?.properties?.buttons?.labels?.submit, 'Submit')}
           </Button>
-
         </Stack>
       </form >
     </FormControl>

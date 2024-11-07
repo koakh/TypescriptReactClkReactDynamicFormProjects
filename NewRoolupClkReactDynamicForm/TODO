@@ -1,0 +1,34 @@
+# TODO
+
+Styles:
+  ☐ NOTE: opted to pass only sx, all work as the same, and none change the font size
+  ☐ use styled
+    const MyButton = styled(Button)(({ theme }) => ({
+      textTransform: 'none',
+      fontSize: '2.2rem',
+      borderRadius: '20px',
+      backgroundColor: '#019c93',
+      color: theme.palette.common.white,
+      '&:hover': {
+        bgcolor: '#01837b',
+        color: 'white',
+      },
+    }));
+  ☐ use useStyles
+    const classes = useStyles();
+    const useStyles = makeStyles((theme) => ({
+      myButton: {
+        textTransform: 'none',
+        fontSize: '1.2rem',
+        fontWeight: theme.typography.fontWeightMedium, // Use the theme's font weight
+        borderRadius: '20px',
+        backgroundColor: '#019c93',
+        color: theme.palette.common.white,
+        '&:hover': {
+          bgcolor: '#01837b',
+          color: 'white',
+        },
+      },
+    }));  
+  ☐ use style
+    style={{ fontSize: '3.0em', margin: 0, paddingLeft: '1.75em' }}

@@ -34,6 +34,8 @@ function App() {
     };
   }, []);
 
+  // const buttonStyle = { borderRadius: '20px', marginTop: 10, padding: 0 };
+
   const onSubmitHandle = (payload: any) => {
     console.log(`consumer-app onSubmitHandle payload: [${JSON.stringify(payload, undefined, 2)}]`);
   }

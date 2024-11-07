@@ -15,7 +15,6 @@
     "@types/react-dom": "^18.3.1",
     "babel-preset-react-app": "^10.0.1",
     "clk-react-dynamic-form": "file:.yalc/clk-react-dynamic-form",
-    "my-react-form-package": "file:.yalc/my-react-form-package",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.1",

@@ -16660,22 +16660,22 @@ var getI18nElementValues = function (i18nFn, e) {
     });
     return result;
 };
-var generateElement = function (e, register, errors, control, watch, setValue, i18nFn) {
+var generateElement = function (dynamicForm, e, register, errors, control, watch, setValue, i18nFn) {
     switch (e.type) {
         case DynamicFormElementType.SELECT:
-            return generateInputSelect(e, register, errors, watch, i18nFn);
+            return generateInputSelect(dynamicForm, e, register, errors, watch, i18nFn);
         case DynamicFormElementType.MULTI_SELECT:
-            return generateInputMultiSelect(e, register, errors, watch, setValue, i18nFn);
+            return generateInputMultiSelect(dynamicForm, e, register, errors, watch, setValue, i18nFn);
         case DynamicFormElementType.RADIO:
-            return generateInputRadio(e, errors, control, i18nFn);
+            return generateInputRadio(dynamicForm, e, errors, control, i18nFn);
         case DynamicFormElementType.CHECKBOX:
-            return generateInputCheckBox(e, register, watch);
+            return generateInputCheckBox(dynamicForm, e, register, watch, i18nFn);
         default:
-            return generateInputText(e, register, errors, i18nFn);
+            return generateInputText(dynamicForm, e, register, errors, i18nFn);
     }
 };
-var generateInputText = function (e, register, errors, i18nFn) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+var generateInputText = function (dynamicForm, e, register, errors, i18nFn) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
     // BOF: common element code
     // get errorMessages
     // TODO: i18n stuff
@@ -16693,12 +16693,7 @@ var generateInputText = function (e, register, errors, i18nFn) {
         React__default.createElement(FormControl$2
         // inject dynamicAttributesFormControl
         , __assign({}, dynamicAttributesFormControl),
-            React__default.createElement(TextField$1, __assign({ id: e.key, type: e.type, 
-                // label={e.label}
-                // placeholder={e.placeHolder}
-                // defaultValue={e.defaultValue}
-                // helperText={errorMessage || e.helperText}
-                label: i18n['label'], placeholder: i18n['placeHolder'], defaultValue: i18n['defaultValue'], helperText: errorMessage || i18n['helperText'], error: errors[e.key] !== undefined }, register(e.key, {
+            React__default.createElement(TextField$1, __assign({ id: e.key, type: e.type, label: i18n['label'], placeholder: i18n['placeHolder'], defaultValue: i18n['defaultValue'], helperText: errorMessage || i18n['helperText'], error: errors[e.key] !== undefined }, register(e.key, {
                 required: (_a = e.validationRules) === null || _a === void 0 ? void 0 : _a.required,
                 min: ((_b = e.validationRules) === null || _b === void 0 ? void 0 : _b.min) ? getNumberValidation((_c = e.validationRules) === null || _c === void 0 ? void 0 : _c.min) : undefined,
                 max: ((_d = e.validationRules) === null || _d === void 0 ? void 0 : _d.max) ? getNumberValidation((_e = e.validationRules) === null || _e === void 0 ? void 0 : _e.max) : undefined,
@@ -16706,10 +16701,12 @@ var generateInputText = function (e, register, errors, i18nFn) {
                 maxLength: ((_h = e.validationRules) === null || _h === void 0 ? void 0 : _h.maxLength) ? getNumberValidation((_j = e.validationRules) === null || _j === void 0 ? void 0 : _j.maxLength) : undefined,
                 pattern: patternValidation,
                 validate: ((_k = e.validationRules) === null || _k === void 0 ? void 0 : _k.validate) ? getValidateObject(e) : undefined,
-            }), dynamicAttributes)))));
+            }), dynamicAttributes, { 
+                // inject styles
+                sx: (_m = (_l = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _l === void 0 ? void 0 : _l.styles) === null || _m === void 0 ? void 0 : _m.input })))));
 };
-var generateInputSelect = function (e, register, errors, watch, i18nFn) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+var generateInputSelect = function (dynamicForm, e, register, errors, watch, i18nFn) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
     // BOF: common element code
     // get errorMessages
     var errorMessage = generateElementErrorMessage(e, errors, i18nFn);
@@ -16718,6 +16715,8 @@ var generateInputSelect = function (e, register, errors, watch, i18nFn) {
     var dynamicAttributesFormControl = e.attributesFormControl ? parseAttributeString(e.attributesFormControl) : undefined;
     // get patternValidation
     var patternValidation = getPatternValidation(e);
+    // i18n
+    var i18n = getI18nElementValues(i18nFn, e);
     // EOF: common element code
     // get the current value of the select field
     var currentValue = watch(e.key) || e.defaultValue;
@@ -16726,7 +16725,7 @@ var generateInputSelect = function (e, register, errors, watch, i18nFn) {
         // inject dynamicAttributesFormControl
         , __assign({}, dynamicAttributesFormControl),
             React__default.createElement(InputLabel$2, null, e.label),
-            React__default.createElement(Select$2, __assign({ id: e.key, type: e.type, label: e.label, placeholder: e.placeHolder, defaultValue: e.defaultValue, error: errors[e.key] !== undefined }, register(e.key, {
+            React__default.createElement(Select$2, __assign({ id: e.key, type: e.type, label: i18n['label'], placeholder: i18n['placeHolder'], defaultValue: i18n['defaultValue'], helperText: errorMessage || i18n['helperText'] }, register(e.key, {
                 required: (_a = e.validationRules) === null || _a === void 0 ? void 0 : _a.required,
                 min: ((_b = e.validationRules) === null || _b === void 0 ? void 0 : _b.min) ? getNumberValidation((_c = e.validationRules) === null || _c === void 0 ? void 0 : _c.min) : undefined,
                 max: ((_d = e.validationRules) === null || _d === void 0 ? void 0 : _d.max) ? getNumberValidation((_e = e.validationRules) === null || _e === void 0 ? void 0 : _e.max) : undefined,
@@ -16736,7 +16735,9 @@ var generateInputSelect = function (e, register, errors, watch, i18nFn) {
                 validate: ((_k = e.validationRules) === null || _k === void 0 ? void 0 : _k.validate) ? getValidateObject(e) : undefined,
             }), dynamicAttributes, { 
                 // required for reset form works
-                value: currentValue }), Array.isArray(e.options) && ((_l = e.options) === null || _l === void 0 ? void 0 : _l.map(function (e) {
+                value: currentValue, 
+                // inject styles
+                sx: (_m = (_l = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _l === void 0 ? void 0 : _l.styles) === null || _m === void 0 ? void 0 : _m.select }), Array.isArray(e.options) && ((_o = e.options) === null || _o === void 0 ? void 0 : _o.map(function (e) {
                 var label = e;
                 var value = e;
                 // override defaults
@@ -16748,8 +16749,8 @@ var generateInputSelect = function (e, register, errors, watch, i18nFn) {
             }))),
             errorMessage ? React__default.createElement(Typography, { variant: "caption", color: "error" }, errorMessage) : React__default.createElement(FormHelperText$2, null, e.helperText))));
 };
-var generateInputMultiSelect = function (e, register, errors, watch, setValue, i18nFn) {
-    var _a, _b, _c;
+var generateInputMultiSelect = function (dynamicForm, e, register, errors, watch, setValue, i18nFn) {
+    var _a, _b, _c, _d, _e;
     // BOF: common element code
     // get errorMessages
     var errorMessage = generateElementErrorMessage(e, errors, i18nFn);
@@ -16758,6 +16759,8 @@ var generateInputMultiSelect = function (e, register, errors, watch, setValue, i
     var dynamicAttributesFormControl = e.attributesFormControl ? parseAttributeString(e.attributesFormControl) : undefined;
     // get patternValidation
     var patternValidation = getPatternValidation(e);
+    // i18n
+    var i18n = getI18nElementValues(i18nFn, e);
     // EOF: common element code
     var ITEM_HEIGHT = 48;
     var ITEM_PADDING_TOP = 8;
@@ -16774,9 +16777,9 @@ var generateInputMultiSelect = function (e, register, errors, watch, setValue, i
     return (React__default.createElement("div", null,
         React__default.createElement(FormControl$2, __assign({ sx: { mb: 1 /*, width: 300*/ } }, dynamicAttributesFormControl),
             React__default.createElement(InputLabel$2, null, e.label),
-            React__default.createElement(Select$2, __assign({ fullWidth: true, multiple: true, id: e.key, type: e.type, label: e.label, placeholder: e.placeHolder, 
+            React__default.createElement(Select$2, __assign({ fullWidth: true, multiple: true, id: e.key, type: e.type, label: i18n['label'], placeholder: i18n['placeHolder'], 
                 // set the default value here
-                defaultValue: e.defaultValue || [], error: errors[e.key] !== undefined }, register(e.key, {
+                defaultValue: i18n['defaultValue'] || [], helperText: errorMessage || i18n['helperText'], error: errors[e.key] !== undefined }, register(e.key, {
                 required: (_a = e.validationRules) === null || _a === void 0 ? void 0 : _a.required,
                 pattern: patternValidation,
                 validate: ((_b = e.validationRules) === null || _b === void 0 ? void 0 : _b.validate) ? getValidateObject(e) : undefined,
@@ -16789,18 +16792,23 @@ var generateInputMultiSelect = function (e, register, errors, watch, setValue, i
                         ? event.target.value.split(',')
                         : event.target.value;
                     setValue(e.key, newValue);
-                }, input: React__default.createElement(OutlinedInput$2, { label: "Tag" }), renderValue: function (selected) { return (typeof selected === 'string' ? selected.split(',').join(', ') : selected.join(', ')); }, MenuProps: MenuProps }), Array.isArray(e.options) && ((_c = e.options) === null || _c === void 0 ? void 0 : _c.map(function (name) { return (React__default.createElement(MenuItem, { key: name, value: name.split(':')[0] },
+                }, input: React__default.createElement(OutlinedInput$2, { label: "Tag" }), renderValue: function (selected) { return (typeof selected === 'string' ? selected.split(',').join(', ') : selected.join(', ')); }, MenuProps: MenuProps, 
+                // inject styles
+                sx: (_d = (_c = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _c === void 0 ? void 0 : _c.styles) === null || _d === void 0 ? void 0 : _d.multiSelect }), Array.isArray(e.options) && ((_e = e.options) === null || _e === void 0 ? void 0 : _e.map(function (name) { return (React__default.createElement(MenuItem, { key: name, value: name.split(':')[0] },
                 React__default.createElement(Checkbox, { checked: currentValue.includes(name.split(':')[0]) }),
                 React__default.createElement(ListItemText, { primary: name.split(':')[1] }))); }))),
             errorMessage ? React__default.createElement(Typography, { variant: "caption", color: "error" }, errorMessage) : React__default.createElement(FormHelperText$2, null, e.helperText))));
 };
-var generateInputRadio = function (e, errors, control, i18nFn) {
+var generateInputRadio = function (dynamicForm, e, errors, control, i18nFn) {
+    var _a, _b;
     // BOF: common element code
     // get errorMessages
     var errorMessage = generateElementErrorMessage(e, errors, i18nFn);
     // get dynamicAttributes and dynamicAttributesFormControl
     var dynamicAttributes = e.attributes ? parseAttributeString(e.attributes) : undefined;
     var dynamicAttributesFormControl = e.attributesFormControl ? parseAttributeString(e.attributesFormControl) : undefined;
+    // i18n
+    var i18n = getI18nElementValues(i18nFn, e);
     // EOF: common element code
     // NOTE: this must be a react hook form controlled component because of the nature of MUI radio box
     return (React__default.createElement("div", { className: 'form-element' },
@@ -16808,7 +16816,7 @@ var generateInputRadio = function (e, errors, control, i18nFn) {
         // inject dynamicAttributesFormControl
         , __assign({}, dynamicAttributesFormControl),
             React__default.createElement(FormLabel$2, null, e.label),
-            React__default.createElement(Controller, __assign({ name: e.key, defaultValue: e.defaultValue }, dynamicAttributes, { control: control, render: function (_a) {
+            React__default.createElement(Controller, __assign({ name: e.key, defaultValue: i18n['defaultValue'] }, dynamicAttributes, { control: control, render: function (_a) {
                     var _b;
                     var field = _a.field; _a.fieldState; _a.formState;
                     return (React__default.createElement(RadioGroup, __assign({}, field), Array.isArray(e.options) && ((_b = e.options) === null || _b === void 0 ? void 0 : _b.map(function (e) {
@@ -16821,38 +16829,44 @@ var generateInputRadio = function (e, errors, control, i18nFn) {
                         }
                         return React__default.createElement(FormControlLabel, { key: value, label: label, value: value, control: React__default.createElement(Radio, null) });
                     }))));
-                } })),
+                }, 
+                // inject styles
+                sx: (_b = (_a = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _a === void 0 ? void 0 : _a.styles) === null || _b === void 0 ? void 0 : _b.radio })),
             errorMessage ? React__default.createElement(Typography, { variant: "caption", color: "error" }, errorMessage) : React__default.createElement(FormHelperText$2, null, e.helperText))));
 };
-var generateInputCheckBox = function (e, register, watch, i18nFn) {
-    var _a;
+var generateInputCheckBox = function (dynamicForm, e, register, watch, i18nFn) {
+    var _a, _b, _c;
     // BOF: common element code
     // get dynamicAttributes and dynamicAttributesFormControl
     var dynamicAttributes = e.attributes ? parseAttributeString(e.attributes) : undefined;
     var dynamicAttributesFormControl = e.attributesFormControl ? parseAttributeString(e.attributesFormControl) : undefined;
+    // i18n
+    var i18n = getI18nElementValues(i18nFn, e);
     // EOF: common element code
     // watch the current value
     var currentValue = watch(e.key);
     // get the registration props
-    var _b = register(e.key), onChange = _b.onChange, onBlur = _b.onBlur, name = _b.name, ref = _b.ref;
+    var _d = register(e.key), onChange = _d.onChange, onBlur = _d.onBlur, name = _d.name, ref = _d.ref;
     return (React__default.createElement("div", { className: 'form-element' },
         React__default.createElement(FormControl$2, __assign({}, dynamicAttributesFormControl),
             React__default.createElement(FormControlLabel, { control: React__default.createElement(Checkbox, __assign({ id: e.key, checked: (_a = currentValue !== null && currentValue !== void 0 ? currentValue : e.defaultValue) !== null && _a !== void 0 ? _a : false, onChange: function (event) {
                         // Handle the checkbox change
                         onChange(event);
-                    }, onBlur: onBlur, name: name, inputRef: ref }, dynamicAttributes)), label: e.label }),
-            e.helperText && React__default.createElement(FormHelperText$2, null, e.helperText))));
+                    }, onBlur: onBlur, name: name, inputRef: ref }, dynamicAttributes)), label: i18n['label'], 
+                // inject styles
+                sx: (_c = (_b = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _b === void 0 ? void 0 : _b.styles) === null || _c === void 0 ? void 0 : _c.checkBox }),
+            e.helperText && React__default.createElement(FormHelperText$2, null, i18n['helperText']))));
 };
 
 var DynamicFormComponent = function (_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
+    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1;
     var tool = _a.tool, i18nFn = _a.i18nFn, onSubmitHandle = _a.onSubmitHandle, onCloseHandle = _a.onCloseHandle;
-    var _t = useForm(), control = _t.control, register = _t.register, handleSubmit = _t.handleSubmit, reset = _t.reset, watch = _t.watch, setValue = _t.setValue, errors = _t.formState.errors;
+    var _2 = useForm(), control = _2.control, register = _2.register, handleSubmit = _2.handleSubmit, reset = _2.reset, watch = _2.watch, setValue = _2.setValue, errors = _2.formState.errors;
     // watcher
     var watcher = useRef({});
     // state for field-specific and global errors
-    var _u = useState({}), globalErrors = _u[0], setGlobalErrors = _u[1];
-    var _v = useState(null), globalError = _v[0], setGlobalError = _v[1];
+    var _3 = useState({}), globalErrors = _3[0], setGlobalErrors = _3[1];
+    var _4 = useState(null), globalError = _4[0], setGlobalError = _4[1];
     // inner function
     function renderFormElements(dynamicForm) {
         return dynamicForm.elements.map(function (e) {
@@ -16868,7 +16882,7 @@ var DynamicFormComponent = function (_a) {
                 }
                 // console.log(`isVisible: ${isVisible}`);
             }
-            return showElement && (React__default.createElement("div", { key: e.key }, generateElement(e, register, errors, control, watch, setValue, i18nFn)));
+            return showElement && (React__default.createElement("div", { key: e.key }, generateElement(dynamicForm, e, register, errors, control, watch, setValue, i18nFn)));
         });
     }
     // OPT #1
@@ -16958,7 +16972,7 @@ var DynamicFormComponent = function (_a) {
         React__default.createElement("form", { 
             // TODO: any
             onSubmit: handleSubmit(function (data, e) { return onSubmit(data, e, tool); }) },
-            (tool === null || tool === void 0 ? void 0 : tool.form) && renderFormElements(tool.form /*, initialValues, register, errors*/),
+            (tool === null || tool === void 0 ? void 0 : tool.form) && renderFormElements(tool.form),
             globalErrors && Object.keys(globalErrors).length > 0 && (React__default.createElement(Alert, { severity: "error", icon: false, style: { marginTop: 10, padding: 0 } },
                 React__default.createElement("ul", { style: { margin: 0, paddingLeft: '1.75em' } }, Object.keys(globalErrors).map(function (e) { return React__default.createElement("li", { key: e }, globalErrors[e]); })))),
             globalError && (React__default.createElement(Alert, { severity: "error", icon: false, style: { marginTop: 10, padding: 0 } },
@@ -16967,11 +16981,11 @@ var DynamicFormComponent = function (_a) {
             ((_e = (_d = tool === null || tool === void 0 ? void 0 : tool.form) === null || _d === void 0 ? void 0 : _d.properties) === null || _e === void 0 ? void 0 : _e.helperText) && React__default.createElement(FormHelperText$2, { style: { marginTop: 10, marginLeft: 0, marginRight: 0 } }, tool.form.properties.helperText),
             React__default.createElement(Stack, { direction: "row", justifyContent: "flex-end", alignItems: "center", spacing: 2, sx: { marginTop: 2 } },
                 onCloseHandle &&
-                    React__default.createElement(Button, { variant: 'contained', type: "submit", onClick: function (e) {
+                    React__default.createElement(Button, { variant: 'contained', type: "submit", sx: (_h = (_g = (_f = tool === null || tool === void 0 ? void 0 : tool.form) === null || _f === void 0 ? void 0 : _f.properties) === null || _g === void 0 ? void 0 : _g.styles) === null || _h === void 0 ? void 0 : _h.button, onClick: function (e) {
                             e.preventDefault();
                             onCloseHandle();
-                        } }, getI18nValue(i18nFn, (_j = (_h = (_g = (_f = tool === null || tool === void 0 ? void 0 : tool.form) === null || _f === void 0 ? void 0 : _f.properties) === null || _g === void 0 ? void 0 : _g.buttons) === null || _h === void 0 ? void 0 : _h.labels) === null || _j === void 0 ? void 0 : _j.close, 'Close')),
-                React__default.createElement(Button, { variant: 'contained', type: "reset", 
+                        } }, getI18nValue(i18nFn, (_m = (_l = (_k = (_j = tool === null || tool === void 0 ? void 0 : tool.form) === null || _j === void 0 ? void 0 : _j.properties) === null || _k === void 0 ? void 0 : _k.buttons) === null || _l === void 0 ? void 0 : _l.labels) === null || _m === void 0 ? void 0 : _m.close, 'Close')),
+                React__default.createElement(Button, { variant: 'contained', type: "reset", sx: (_q = (_p = (_o = tool === null || tool === void 0 ? void 0 : tool.form) === null || _o === void 0 ? void 0 : _o.properties) === null || _p === void 0 ? void 0 : _p.styles) === null || _q === void 0 ? void 0 : _q.button, 
                     // onClick={reset as MouseEventHandler<HTMLButtonElement>}
                     onClick: function () {
                         // console.log(`tool.form?.elements: [${JSON.stringify(tool.form?.elements, undefined, 2)}]`);
@@ -16980,8 +16994,8 @@ var DynamicFormComponent = function (_a) {
                         setGlobalError(null);
                         setGlobalErrors({});
                         reset();
-                    } }, getI18nValue(i18nFn, (_o = (_m = (_l = (_k = tool === null || tool === void 0 ? void 0 : tool.form) === null || _k === void 0 ? void 0 : _k.properties) === null || _l === void 0 ? void 0 : _l.buttons) === null || _m === void 0 ? void 0 : _m.labels) === null || _o === void 0 ? void 0 : _o.reset, 'Reset')),
-                React__default.createElement(Button, { variant: 'contained', type: "submit" }, getI18nValue(i18nFn, (_s = (_r = (_q = (_p = tool === null || tool === void 0 ? void 0 : tool.form) === null || _p === void 0 ? void 0 : _p.properties) === null || _q === void 0 ? void 0 : _q.buttons) === null || _r === void 0 ? void 0 : _r.labels) === null || _s === void 0 ? void 0 : _s.submit, 'Submit'))))));
+                    } }, getI18nValue(i18nFn, (_u = (_t = (_s = (_r = tool === null || tool === void 0 ? void 0 : tool.form) === null || _r === void 0 ? void 0 : _r.properties) === null || _s === void 0 ? void 0 : _s.buttons) === null || _t === void 0 ? void 0 : _t.labels) === null || _u === void 0 ? void 0 : _u.reset, 'Reset')),
+                React__default.createElement(Button, { variant: 'contained', type: "submit", sx: (_x = (_w = (_v = tool === null || tool === void 0 ? void 0 : tool.form) === null || _v === void 0 ? void 0 : _v.properties) === null || _w === void 0 ? void 0 : _w.styles) === null || _x === void 0 ? void 0 : _x.button }, getI18nValue(i18nFn, (_1 = (_0 = (_z = (_y = tool === null || tool === void 0 ? void 0 : tool.form) === null || _y === void 0 ? void 0 : _y.properties) === null || _z === void 0 ? void 0 : _z.buttons) === null || _0 === void 0 ? void 0 : _0.labels) === null || _1 === void 0 ? void 0 : _1.submit, 'Submit'))))));
 };
 
 var MyForm = function () {
