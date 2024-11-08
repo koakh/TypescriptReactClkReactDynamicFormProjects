@@ -302,7 +302,6 @@ const generateInputSelect = (
           label={i18n['label']}
           placeholder={i18n['placeHolder']}
           defaultValue={i18n['defaultValue']}
-          helperText={errorMessage || i18n['helperText']}
           // register element
           {...register(e.key, {
             required: e.validationRules?.required,
@@ -325,13 +324,16 @@ const generateInputSelect = (
             let value = e;
             // override defaults
             if (e.includes(':')) {
+              // beginner:micropal-tools.lesson-planner.skill_level.option1
+              // get first part ex beginner
               value = e.split(':')[0];
-              label = e.split(':')[1];
+              // get second part without split with ex `micropal:tools.lesson-planner.skill_level.option1`
+              label = e.substring(e.indexOf(':') + 1);
             }
             return <MenuItem key={value} value={value}>{label}</MenuItem>
           })}
         </Select>
-        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{e.helperText}</FormHelperText>}
+        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
       </FormControl>
     </div>
   );
@@ -388,7 +390,6 @@ const generateInputMultiSelect = (
           placeholder={i18n['placeHolder']}
           // set the default value here
           defaultValue={i18n['defaultValue'] || []}
-          helperText={errorMessage || i18n['helperText']}
           error={errors[e.key] !== undefined}
           // register element
           {...register(e.key, {
@@ -423,7 +424,7 @@ const generateInputMultiSelect = (
             </MenuItem>
           ))}
         </Select>
-        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{e.helperText}</FormHelperText>}
+        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
       </FormControl>
     </div>
   );
@@ -479,7 +480,7 @@ const generateInputRadio = (
           // inject styles
           sx={dynamicForm?.properties?.styles?.radio}
         />
-        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{e.helperText}</FormHelperText>}
+        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
       </FormControl>
     </div>);
 }
@@ -496,7 +497,7 @@ const generateInputCheckBox = (
   const dynamicAttributes = e.attributes ? parseAttributeString(e.attributes) : undefined;
   const dynamicAttributesFormControl = e.attributesFormControl ? parseAttributeString(e.attributesFormControl) : undefined;
   // i18n
-  const i18n = getI18nElementValues(i18nFn, e);  
+  const i18n = getI18nElementValues(i18nFn, e);
   // EOF: common element code
 
   // watch the current value

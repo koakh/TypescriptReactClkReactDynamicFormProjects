@@ -29,9 +29,9 @@ export interface DynamicFormElementValidationRules {
 export interface DynamicFormElement {
   type: string;
   key: string;
-  label: string;
-  placeHolder?: string;
-  helperText?: string;
+  label: string | boolean;
+  placeHolder?: string | boolean;
+  helperText?: string | boolean;
   defaultValue: string | boolean | number | readonly string[] | undefined;
   options?: string | string[];
   visible?: string;
