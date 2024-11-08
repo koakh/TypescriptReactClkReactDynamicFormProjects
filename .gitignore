@@ -1,5 +1,2 @@
 .bak/*.tgz
-ClaudeRoolUpBase/my-app/node_modules/
-ClaudeRoolUpBase/my-react-form-package/node_modules/
-ClaudeRoolUpBase/ClaudeRoolupClkReactDynamicForm/node_modules/
-ClaudeRoolUpBase/ReactClkMicroPalFormToolsPoc/node_modules/
+**/node_modules/**
