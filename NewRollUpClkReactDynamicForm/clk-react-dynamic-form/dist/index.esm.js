@@ -16935,6 +16935,7 @@ var DynamicFormComponent = function (_a) {
         var _a, _b, _c;
         // reset after form submit
         e.target.reset();
+        reset();
         // console.log(`onSubmit data: ${JSON.stringify(data)}`);
         var payload = data;
         // clear previous errors

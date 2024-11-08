@@ -103,6 +103,7 @@ export const DynamicFormComponent: React.FC<Props> = ({ tool, i18nFn, onSubmitHa
   const onSubmit = (data: any, e: any, tool: Tool) => {
     // reset after form submit
     e.target.reset();
+    reset();
     // console.log(`onSubmit data: ${JSON.stringify(data)}`);
     let payload = data;
 
