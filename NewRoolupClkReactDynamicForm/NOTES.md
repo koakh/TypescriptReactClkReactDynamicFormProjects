@@ -1,5 +1,9 @@
 # NOTES
 
+projects are in:
+- `gram:~/Development/@Koakh/node-modules/@koakh/typescript-react-clk-react-dynamic-form-projects`
+- `c3:~/TypescriptReactClkReactDynamicFormProjects`
+
 - [TypeScript React Package with react-hook-form and MUI 5](https://claude.ai/chat/9db6d8f4-faad-496e-b307-73b99f62e1a0)
 
 ```shell
