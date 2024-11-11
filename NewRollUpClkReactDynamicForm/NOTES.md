@@ -1,8 +1,15 @@
 # NOTES
 
 projects are in:
-- `gram:~/Development/@Koakh/node-modules/@koakh/typescript-react-clk-react-dynamic-form-projects`
-- `c3:~/TypescriptReactClkReactDynamicFormProjects`
+
+development
+
+- `c3:/home/c3/TypescriptReactClkReactDynamicFormProjects`
+- `c3:/home/c3/clk-react-dynamic-form`
+
+backup only
+
+- `gram:~/Development/@Koakh/node-modules/@koakh/typescript-react-clk-react-dynamic-form-projects
 
 - [TypeScript React Package with react-hook-form and MUI 5](https://claude.ai/chat/9db6d8f4-faad-496e-b307-73b99f62e1a0)
 
