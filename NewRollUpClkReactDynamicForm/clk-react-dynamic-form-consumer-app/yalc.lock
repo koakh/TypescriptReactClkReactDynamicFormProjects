@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "clk-react-dynamic-form": {
-      "signature": "79eb8bb46e5a5d8d5aaadd4b10e4a50e",
+      "signature": "c39c82bf9781746644da8bacd858dc3b",
       "file": true
     },
     "my-react-form-package": {

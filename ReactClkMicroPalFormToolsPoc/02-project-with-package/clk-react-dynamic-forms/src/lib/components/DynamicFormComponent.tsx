@@ -155,7 +155,7 @@ const DynamicFormComponent: React.FC<Props> = ({ tool, i18nFn }: Props): JSX.Ele
           className='form-button'
           type="submit"
         >
-          {getI18nValue(i18nFn, tool?.form?.properties?.buttons?.labels?.submit, 'Submit form')}
+          {getI18nValue(i18nFn, tool?.form?.i18n?.buttons?.submit, 'Submit form')}
         </button>
 
         {/*
@@ -185,7 +185,7 @@ const DynamicFormComponent: React.FC<Props> = ({ tool, i18nFn }: Props): JSX.Ele
           }}
 
         >
-          {getI18nValue(i18nFn, tool?.form?.properties?.buttons?.labels?.reset, 'Custom Reset Field Values & Errors')}
+          {getI18nValue(i18nFn, tool?.form?.i18n?.buttons?.reset, 'Custom Reset Field Values & Errors')}
         </button>
 
         {/* globalErrors display */}

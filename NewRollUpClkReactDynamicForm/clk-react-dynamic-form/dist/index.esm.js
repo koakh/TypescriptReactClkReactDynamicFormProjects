@@ -16738,15 +16738,15 @@ var generateInputSelect = function (dynamicForm, e, register, errors, watch, i18
                 value: currentValue, 
                 // inject styles
                 sx: (_m = (_l = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _l === void 0 ? void 0 : _l.styles) === null || _m === void 0 ? void 0 : _m.select }), Array.isArray(e.options) && ((_o = e.options) === null || _o === void 0 ? void 0 : _o.map(function (e) {
-                var label = e;
                 var value = e;
+                var label = getI18nValue(i18nFn, e);
                 // override defaults
                 if (e.includes(':')) {
                     // beginner:micropal-tools.lesson-planner.skill_level.option1
                     // get first part ex beginner
                     value = e.split(':')[0];
                     // get second part without split with ex `micropal:tools.lesson-planner.skill_level.option1`
-                    label = e.substring(e.indexOf(':') + 1);
+                    label = getI18nValue(i18nFn, e.substring(e.indexOf(':') + 1));
                 }
                 return React__default.createElement(MenuItem, { key: value, value: value }, label);
             }))),
@@ -16797,9 +16797,9 @@ var generateInputMultiSelect = function (dynamicForm, e, register, errors, watch
                     setValue(e.key, newValue);
                 }, input: React__default.createElement(OutlinedInput$2, { label: "Tag" }), renderValue: function (selected) { return (typeof selected === 'string' ? selected.split(',').join(', ') : selected.join(', ')); }, MenuProps: MenuProps, 
                 // inject styles
-                sx: (_d = (_c = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _c === void 0 ? void 0 : _c.styles) === null || _d === void 0 ? void 0 : _d.multiSelect }), Array.isArray(e.options) && ((_e = e.options) === null || _e === void 0 ? void 0 : _e.map(function (name) { return (React__default.createElement(MenuItem, { key: name, value: name.split(':')[0] },
-                React__default.createElement(Checkbox, { checked: currentValue.includes(name.split(':')[0]) }),
-                React__default.createElement(ListItemText, { primary: name.split(':')[1] }))); }))),
+                sx: (_d = (_c = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _c === void 0 ? void 0 : _c.styles) === null || _d === void 0 ? void 0 : _d.multiSelect }), Array.isArray(e.options) && ((_e = e.options) === null || _e === void 0 ? void 0 : _e.map(function (option) { return (React__default.createElement(MenuItem, { key: option, value: option.split(':')[0] },
+                React__default.createElement(Checkbox, { checked: currentValue.includes(option.split(':')[0]) }),
+                React__default.createElement(ListItemText, { primary: option.split(':')[1] ? option.substring(option.indexOf(':') + 1) : option.split(':')[0] }))); }))),
             errorMessage ? React__default.createElement(Typography, { variant: "caption", color: "error" }, errorMessage) : React__default.createElement(FormHelperText$2, null, i18n['helperText']))));
 };
 var generateInputRadio = function (dynamicForm, e, errors, control, i18nFn) {
@@ -16823,14 +16823,17 @@ var generateInputRadio = function (dynamicForm, e, errors, control, i18nFn) {
                     var _b;
                     var field = _a.field; _a.fieldState; _a.formState;
                     return (React__default.createElement(RadioGroup, __assign({}, field), Array.isArray(e.options) && ((_b = e.options) === null || _b === void 0 ? void 0 : _b.map(function (e) {
-                        var label = e;
                         var value = e;
+                        var label = getI18nValue(i18nFn, e);
                         // override defaults
                         if (e.includes(':')) {
+                            // beginner:micropal-tools.lesson-planner.skill_level.option1
+                            // get first part ex beginner
                             value = e.split(':')[0];
-                            label = e.split(':')[1];
+                            // get second part without split with ex `micropal:tools.lesson-planner.skill_level.option1`
+                            label = getI18nValue(i18nFn, e.substring(e.indexOf(':') + 1));
                         }
-                        return React__default.createElement(FormControlLabel, { key: value, label: label, value: value, control: React__default.createElement(Radio, null) });
+                        return React__default.createElement(FormControlLabel, { key: value, label: getI18nValue(i18nFn, label), value: value, control: React__default.createElement(Radio, null) });
                     }))));
                 }, 
                 // inject styles
@@ -16862,14 +16865,14 @@ var generateInputCheckBox = function (dynamicForm, e, register, watch, i18nFn) {
 };
 
 var DynamicFormComponent = function (_a) {
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1;
+    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y;
     var tool = _a.tool, i18nFn = _a.i18nFn, onSubmitHandle = _a.onSubmitHandle, onCloseHandle = _a.onCloseHandle;
-    var _2 = useForm(), control = _2.control, register = _2.register, handleSubmit = _2.handleSubmit, reset = _2.reset, watch = _2.watch, setValue = _2.setValue, errors = _2.formState.errors;
+    var _z = useForm(), control = _z.control, register = _z.register, handleSubmit = _z.handleSubmit, reset = _z.reset, watch = _z.watch, setValue = _z.setValue, errors = _z.formState.errors;
     // watcher
     var watcher = useRef({});
     // state for field-specific and global errors
-    var _3 = useState({}), globalErrors = _3[0], setGlobalErrors = _3[1];
-    var _4 = useState(null), globalError = _4[0], setGlobalError = _4[1];
+    var _0 = useState({}), globalErrors = _0[0], setGlobalErrors = _0[1];
+    var _1 = useState(null), globalError = _1[0], setGlobalError = _1[1];
     // inner function
     function renderFormElements(dynamicForm) {
         return dynamicForm.elements.map(function (e) {
@@ -16935,6 +16938,7 @@ var DynamicFormComponent = function (_a) {
         var _a, _b, _c;
         // reset after form submit
         e.target.reset();
+        // required react hook form reset to
         reset();
         // console.log(`onSubmit data: ${JSON.stringify(data)}`);
         var payload = data;
@@ -16988,8 +16992,8 @@ var DynamicFormComponent = function (_a) {
                     React__default.createElement(Button, { variant: 'contained', type: "submit", sx: (_h = (_g = (_f = tool === null || tool === void 0 ? void 0 : tool.form) === null || _f === void 0 ? void 0 : _f.properties) === null || _g === void 0 ? void 0 : _g.styles) === null || _h === void 0 ? void 0 : _h.button, onClick: function (e) {
                             e.preventDefault();
                             onCloseHandle();
-                        } }, getI18nValue(i18nFn, (_m = (_l = (_k = (_j = tool === null || tool === void 0 ? void 0 : tool.form) === null || _j === void 0 ? void 0 : _j.properties) === null || _k === void 0 ? void 0 : _k.buttons) === null || _l === void 0 ? void 0 : _l.labels) === null || _m === void 0 ? void 0 : _m.close, 'Close')),
-                React__default.createElement(Button, { variant: 'contained', type: "reset", sx: (_q = (_p = (_o = tool === null || tool === void 0 ? void 0 : tool.form) === null || _o === void 0 ? void 0 : _o.properties) === null || _p === void 0 ? void 0 : _p.styles) === null || _q === void 0 ? void 0 : _q.button, 
+                        } }, getI18nValue(i18nFn, (_l = (_k = (_j = tool === null || tool === void 0 ? void 0 : tool.form) === null || _j === void 0 ? void 0 : _j.i18n) === null || _k === void 0 ? void 0 : _k.buttons) === null || _l === void 0 ? void 0 : _l.close, 'Close')),
+                React__default.createElement(Button, { variant: 'contained', type: "reset", sx: (_p = (_o = (_m = tool === null || tool === void 0 ? void 0 : tool.form) === null || _m === void 0 ? void 0 : _m.properties) === null || _o === void 0 ? void 0 : _o.styles) === null || _p === void 0 ? void 0 : _p.button, 
                     // onClick={reset as MouseEventHandler<HTMLButtonElement>}
                     onClick: function () {
                         // console.log(`tool.form?.elements: [${JSON.stringify(tool.form?.elements, undefined, 2)}]`);
@@ -16998,8 +17002,8 @@ var DynamicFormComponent = function (_a) {
                         setGlobalError(null);
                         setGlobalErrors({});
                         reset();
-                    } }, getI18nValue(i18nFn, (_u = (_t = (_s = (_r = tool === null || tool === void 0 ? void 0 : tool.form) === null || _r === void 0 ? void 0 : _r.properties) === null || _s === void 0 ? void 0 : _s.buttons) === null || _t === void 0 ? void 0 : _t.labels) === null || _u === void 0 ? void 0 : _u.reset, 'Reset')),
-                React__default.createElement(Button, { variant: 'contained', type: "submit", sx: (_x = (_w = (_v = tool === null || tool === void 0 ? void 0 : tool.form) === null || _v === void 0 ? void 0 : _v.properties) === null || _w === void 0 ? void 0 : _w.styles) === null || _x === void 0 ? void 0 : _x.button }, getI18nValue(i18nFn, (_1 = (_0 = (_z = (_y = tool === null || tool === void 0 ? void 0 : tool.form) === null || _y === void 0 ? void 0 : _y.properties) === null || _z === void 0 ? void 0 : _z.buttons) === null || _0 === void 0 ? void 0 : _0.labels) === null || _1 === void 0 ? void 0 : _1.submit, 'Submit'))))));
+                    } }, getI18nValue(i18nFn, (_s = (_r = (_q = tool === null || tool === void 0 ? void 0 : tool.form) === null || _q === void 0 ? void 0 : _q.i18n) === null || _r === void 0 ? void 0 : _r.buttons) === null || _s === void 0 ? void 0 : _s.reset, 'Reset')),
+                React__default.createElement(Button, { variant: 'contained', type: "submit", sx: (_v = (_u = (_t = tool === null || tool === void 0 ? void 0 : tool.form) === null || _t === void 0 ? void 0 : _t.properties) === null || _u === void 0 ? void 0 : _u.styles) === null || _v === void 0 ? void 0 : _v.button }, getI18nValue(i18nFn, (_y = (_x = (_w = tool === null || tool === void 0 ? void 0 : tool.form) === null || _w === void 0 ? void 0 : _w.i18n) === null || _x === void 0 ? void 0 : _x.buttons) === null || _y === void 0 ? void 0 : _y.submit, 'Submit'))))));
 };
 
 var MyForm = function () {

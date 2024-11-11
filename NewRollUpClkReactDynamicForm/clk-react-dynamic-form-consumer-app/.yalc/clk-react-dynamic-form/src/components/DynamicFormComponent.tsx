@@ -103,6 +103,7 @@ export const DynamicFormComponent: React.FC<Props> = ({ tool, i18nFn, onSubmitHa
   const onSubmit = (data: any, e: any, tool: Tool) => {
     // reset after form submit
     e.target.reset();
+    // required react hook form reset to
     reset();
     // console.log(`onSubmit data: ${JSON.stringify(data)}`);
     let payload = data;
@@ -188,7 +189,7 @@ export const DynamicFormComponent: React.FC<Props> = ({ tool, i18nFn, onSubmitHa
                 onCloseHandle();
               }}
             >
-              {getI18nValue(i18nFn, tool?.form?.properties?.buttons?.labels?.close, 'Close')}
+              {getI18nValue(i18nFn, tool?.form?.i18n?.buttons?.close, 'Close')}
             </Button>
           }
           {/* reset button */}
@@ -205,14 +206,14 @@ export const DynamicFormComponent: React.FC<Props> = ({ tool, i18nFn, onSubmitHa
               reset();
             }}
           >
-            {getI18nValue(i18nFn, tool?.form?.properties?.buttons?.labels?.reset, 'Reset')}
+            {getI18nValue(i18nFn, tool?.form?.i18n?.buttons?.reset, 'Reset')}
           </Button>
           {/* submit button */}
           <Button variant='contained'
             type="submit"
             sx={tool?.form?.properties?.styles?.button}
           >
-            {getI18nValue(i18nFn, tool?.form?.properties?.buttons?.labels?.submit, 'Submit')}
+            {getI18nValue(i18nFn, tool?.form?.i18n?.buttons?.submit, 'Submit')}
           </Button>
         </Stack>
       </form >
