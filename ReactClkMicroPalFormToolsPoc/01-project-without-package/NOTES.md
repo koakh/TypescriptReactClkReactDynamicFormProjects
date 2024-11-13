@@ -45,3 +45,6 @@ $ pnpm add @fontsource/roboto
 - [Dynamically Inject React TextField Attributes](https://claude.ai/chat/c6302277-050e-4070-9153-1d096682ee34)
 - [Accessing Checkbox Value in Material UI Forms](https://claude.ai/chat/c0bebca1-ebdf-4c45-8a63-18a59fb29ba6)
 - [Resetting Checkbox Values in React Hook Form](https://claude.ai/chat/60fcc5ec-c438-47d4-bfa0-f867989403d2)
+- [Styling MUI5 Button Font Size](https://claude.ai/chat/4205d909-c391-4820-8c48-117273c16db7)
+  the trick is `fontSize: "3.0em !important;"`
+- [Handling JSON Config File with Comments and Multiline Strings](https://claude.ai/chat/26cc9e06-25e3-466e-bd72-44869201eedc)
