@@ -1,5 +1,7 @@
 # README
 
+> `clk-react-dynamic-form -> /home/c3/clk-react-dynamic-form` is a symbolic link to `clk-react-dynamic-form`
+
 ## Bootstrap App
 
 ```shell

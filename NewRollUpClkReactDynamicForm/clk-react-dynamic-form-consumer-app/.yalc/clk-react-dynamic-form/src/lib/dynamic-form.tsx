@@ -8,6 +8,8 @@ import { parseValidationRules } from '../utils/main';
 import { DynamicTextFieldProps } from '../interfaces';
 import { ControllerRenderProps } from '../interfaces/controller-render-props-field.interface';
 
+const i18nPrefix = 'micropal:';
+
 /**
  * get react hook form validation object
  * @param e dynamic form element
@@ -155,6 +157,22 @@ const getPatternValidation = (e: DynamicFormElement) => {
 
 export const getI18nValue = (i18nFn: (input: string, startWith?: string) => string, value: string, defaultValue = `invalid defaultValue`) => {
   return value ? i18nFn(value) : defaultValue
+}
+
+const getOptionsValueAndLabel = (i18nFn: (input: string, startWith?: string) => string, option: string): [string, string] => {
+  // if `micropal:tools.quiz_generator.type_of_questions.option1`
+  // always pass value in getI18nValue, and override if includes : and not start with i18nPrefix
+  let value = getI18nValue(i18nFn, option);
+  let label = value;
+  // override defaults: `value:micropal:tools.quiz_generator.type_of_questions.option1`
+  if (option.includes(':') && !option.startsWith(i18nPrefix)) {
+    // beginner:micropal:tools.lesson-planner.skill_level.option1
+    // get first part ex beginner
+    value = option.split(':')[0];
+    // get second part without split with ex `micropal:tools.lesson_planner.skill_level.option1`
+    label = getI18nValue(i18nFn, option.substring(option.indexOf(':') + 1));
+  }
+  return [value, label]
 }
 
 export const getI18nElementValues = (i18nFn: (input: string, startWith?: string) => string, e: DynamicFormElement) => {
@@ -319,17 +337,8 @@ const generateInputSelect = (
           // inject styles
           sx={dynamicForm?.properties?.styles?.select}
         >
-          {Array.isArray(e.options) && e.options?.map((e) => {
-            let value = e;
-            let label = getI18nValue(i18nFn, e);
-            // override defaults
-            if (e.includes(':')) {
-              // beginner:micropal-tools.lesson-planner.skill_level.option1
-              // get first part ex beginner
-              value = e.split(':')[0];
-              // get second part without split with ex `micropal:tools.lesson-planner.skill_level.option1`
-              label = getI18nValue(i18nFn, e.substring(e.indexOf(':') + 1));
-            }
+          {Array.isArray(e.options) && e.options?.map((option) => {
+            const [value, label] = getOptionsValueAndLabel(i18nFn, option);
             return <MenuItem key={value} value={value}>{label}</MenuItem>
           })}
         </Select>
@@ -417,12 +426,15 @@ const generateInputMultiSelect = (
           // inject styles
           sx={dynamicForm?.properties?.styles?.multiSelect}
         >
-          {Array.isArray(e.options) && e.options?.map((option) => (
-            <MenuItem key={option} value={option.split(':')[0]}>
-              <Checkbox checked={currentValue.includes(option.split(':')[0])} />
-              <ListItemText primary={option.split(':')[1] ? option.substring(option.indexOf(':') + 1) : option.split(':')[0]} />
-            </MenuItem>
-          ))}
+          {Array.isArray(e.options) && e.options?.map((option) => {
+            const [value, label] = getOptionsValueAndLabel(i18nFn, option);
+            return (
+              <MenuItem key={option} value={value}>
+                <Checkbox checked={currentValue.includes(value)} />
+                <ListItemText primary={label} />
+              </MenuItem>
+            )
+          })}
         </Select>
         {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
       </FormControl>
@@ -465,17 +477,8 @@ const generateInputRadio = (
           render={({ field, fieldState, formState }: ControllerRenderProps<FieldValues>) => (
             <RadioGroup {...field}
             >
-              {Array.isArray(e.options) && e.options?.map((e) => {
-                let value = e;
-                let label = getI18nValue(i18nFn, e);
-                // override defaults
-                if (e.includes(':')) {
-                  // beginner:micropal-tools.lesson-planner.skill_level.option1
-                  // get first part ex beginner
-                  value = e.split(':')[0];
-                  // get second part without split with ex `micropal:tools.lesson-planner.skill_level.option1`
-                  label = getI18nValue(i18nFn, e.substring(e.indexOf(':') + 1));
-                }
+              {Array.isArray(e.options) && e.options?.map((option) => {
+                const [value, label] = getOptionsValueAndLabel(i18nFn, option);
                 return <FormControlLabel key={value} label={getI18nValue(i18nFn, label)} value={value} control={<Radio />} />
               })}
             </RadioGroup>

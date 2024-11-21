@@ -1,5 +1,10 @@
 {
   "cSpell.words": [
+    "micropal",
     "yalc"
-  ]
+  ],
+  "files.exclude": {
+    "**/node_modules": true,
+    "clk-react-dynamic-form-1.0.5-before-start-to-use-clk-repo": true,
+  }
 }

@@ -14,7 +14,7 @@ backup only
 - [TypeScript React Package with react-hook-form and MUI 5](https://claude.ai/chat/9db6d8f4-faad-496e-b307-73b99f62e1a0)
 
 ```shell
-$ cd $ clk-react-dynamic-form
+$ cd clk-react-dynamic-form
 $ npm link
 $ npm run build
 ```
@@ -57,7 +57,7 @@ $ rm -rf node_modules
 $ npm install
 ```
 
-THE REAL AND FINAL TRICK is 
+THE REAL AND FINAL TRICK is
 
 `clear && npm run build && yalc publish && yalc push` in package or `npm run build:publish:push`
 
