@@ -47,7 +47,7 @@ function App() {
   }
 
   const i18nFn = (input: string, startWith = 'micropal:') => {
-    const getResource = `<i18n>${input}</i18n>`;
+    const getResource = `[i18n]${input}[/i18n]`;
     // const getResource = undefined;
     return input.startsWith(startWith)
       ? getResource ? getResource : `invalid resource key '${input}'`

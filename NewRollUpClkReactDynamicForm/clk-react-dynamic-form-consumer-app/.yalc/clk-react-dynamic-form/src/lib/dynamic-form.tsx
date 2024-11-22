@@ -313,11 +313,12 @@ const generateInputSelect = (
         // inject dynamicAttributesFormControl
         {...dynamicAttributesFormControl}
       >
-        <InputLabel>{e.label}</InputLabel>
+        <InputLabel id={e.key}>{i18n['label']}</InputLabel>
         <Select
           id={e.key}
           type={e.type}
           label={i18n['label']}
+          labelId={e.key}
           placeholder={i18n['placeHolder']}
           defaultValue={i18n['defaultValue']}
           // register element
@@ -342,7 +343,7 @@ const generateInputSelect = (
             return <MenuItem key={value} value={value}>{label}</MenuItem>
           })}
         </Select>
-        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
+        {errorMessage ? <Typography sx={{ ml: 2, mt: '3px' }} variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
       </FormControl>
     </div>
   );
@@ -390,12 +391,13 @@ const generateInputMultiSelect = (
         // inject dynamic properties
         {...dynamicAttributesFormControl}
       >
-        <InputLabel>{e.label}</InputLabel>
-        <Select fullWidth
+        <InputLabel id={e.key}>{i18n['label']}</InputLabel>
+        <Select
           multiple
           id={e.key}
           type={e.type}
           label={i18n['label']}
+          labelId={e.key}
           placeholder={i18n['placeHolder']}
           // set the default value here
           defaultValue={i18n['defaultValue'] || []}
@@ -418,7 +420,8 @@ const generateInputMultiSelect = (
               : event.target.value;
             setValue(e.key, newValue);
           }}
-          input={<OutlinedInput label="Tag" />}
+          // this will corrupt label, ex will be over line
+          // input={<OutlinedInput label="Tag" />}
           renderValue={(selected: string | string[]) => (
             typeof selected === 'string' ? selected.split(',').join(', ') : selected.join(', ')
           )}
@@ -436,7 +439,7 @@ const generateInputMultiSelect = (
             )
           })}
         </Select>
-        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
+        {errorMessage ? <Typography sx={{ ml: 2, mt: '3px' }} variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
       </FormControl>
     </div>
   );
@@ -467,7 +470,7 @@ const generateInputRadio = (
         // inject dynamicAttributesFormControl
         {...dynamicAttributesFormControl}
       >
-        <FormLabel>{e.label}</FormLabel>
+        <FormLabel>{i18n['label']}</FormLabel>
         <Controller
           name={e.key}
           defaultValue={i18n['defaultValue']}
@@ -486,7 +489,7 @@ const generateInputRadio = (
           // inject styles
           sx={dynamicForm?.properties?.styles?.radio}
         />
-        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
+        {errorMessage ? <Typography sx={{ ml: 2, mt: '3px' }} variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
       </FormControl>
     </div>);
 }
