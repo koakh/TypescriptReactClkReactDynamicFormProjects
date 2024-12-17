@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:cleanup": "npm cache clean --force || true && npm rm clk-react-dynamic-form-consumer || true && yalc add clk-react-dynamic-form  || true && npm i && npm run start",
+    "dev:cleanup": "npm cache clean --force || true && npm rm clk-react-dynamic-form-consumer || true && yalc add clk-react-dynamic-form || true && npm i && npm run start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
