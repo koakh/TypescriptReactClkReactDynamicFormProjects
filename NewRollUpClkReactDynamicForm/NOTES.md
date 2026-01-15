@@ -65,5 +65,9 @@ and `npm cache clean --force || true && npm rm clk-react-dynamic-form-consumer |
 
 FINAL FINAL
 in the end is just
+
+```shell
 $ npm run build:publish:push
+```
+
 and consumer app will detect the changes, recompile and refresh browser with changes

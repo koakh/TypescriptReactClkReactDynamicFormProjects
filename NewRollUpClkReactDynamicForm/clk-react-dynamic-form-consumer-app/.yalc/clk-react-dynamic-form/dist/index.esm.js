@@ -1,4 +1,4 @@
-import { FormControl as FormControl$2, InputLabel as InputLabel$2, Select as Select$2, MenuItem, Typography, FormHelperText as FormHelperText$2, OutlinedInput as OutlinedInput$2, Checkbox, ListItemText, FormLabel as FormLabel$2, RadioGroup, FormControlLabel, Radio, Alert, Stack, Button, Box, TextField as TextField$2 } from '@mui/material';
+import { FormControl as FormControl$2, InputLabel as InputLabel$2, Select as Select$2, MenuItem, Typography, FormHelperText as FormHelperText$2, Checkbox, ListItemText, FormLabel as FormLabel$2, RadioGroup, FormControlLabel, Radio, Alert, Stack, Button, Box, TextField as TextField$2 } from '@mui/material';
 import * as React from 'react';
 import React__default, { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -16740,8 +16740,8 @@ var generateInputSelect = function (dynamicForm, e, register, errors, watch, i18
         React__default.createElement(FormControl$2
         // inject dynamicAttributesFormControl
         , __assign({}, dynamicAttributesFormControl),
-            React__default.createElement(InputLabel$2, null, e.label),
-            React__default.createElement(Select$2, __assign({ id: e.key, type: e.type, label: i18n['label'], placeholder: i18n['placeHolder'], defaultValue: i18n['defaultValue'] }, register(e.key, {
+            React__default.createElement(InputLabel$2, { id: e.key }, i18n['label']),
+            React__default.createElement(Select$2, __assign({ id: e.key, type: e.type, label: i18n['label'], labelId: e.key, placeholder: i18n['placeHolder'], defaultValue: i18n['defaultValue'] }, register(e.key, {
                 required: (_a = e.validationRules) === null || _a === void 0 ? void 0 : _a.required,
                 min: ((_b = e.validationRules) === null || _b === void 0 ? void 0 : _b.min) ? getNumberValidation((_c = e.validationRules) === null || _c === void 0 ? void 0 : _c.min) : undefined,
                 max: ((_d = e.validationRules) === null || _d === void 0 ? void 0 : _d.max) ? getNumberValidation((_e = e.validationRules) === null || _e === void 0 ? void 0 : _e.max) : undefined,
@@ -16757,7 +16757,7 @@ var generateInputSelect = function (dynamicForm, e, register, errors, watch, i18
                 var _a = getOptionsValueAndLabel(i18nFn, option), value = _a[0], label = _a[1];
                 return React__default.createElement(MenuItem, { key: value, value: value }, label);
             }))),
-            errorMessage ? React__default.createElement(Typography, { variant: "caption", color: "error" }, errorMessage) : React__default.createElement(FormHelperText$2, null, i18n['helperText']))));
+            errorMessage ? React__default.createElement(Typography, { sx: { ml: 2, mt: '3px' }, variant: "caption", color: "error" }, errorMessage) : React__default.createElement(FormHelperText$2, null, i18n['helperText']))));
 };
 var generateInputMultiSelect = function (dynamicForm, e, register, errors, watch, setValue, i18nFn) {
     var _a, _b, _c, _d, _e;
@@ -16786,8 +16786,8 @@ var generateInputMultiSelect = function (dynamicForm, e, register, errors, watch
     var currentValue = watch(e.key) || e.defaultValue || [];
     return (React__default.createElement("div", null,
         React__default.createElement(FormControl$2, __assign({ sx: { mb: 1 /*, width: 300*/ } }, dynamicAttributesFormControl),
-            React__default.createElement(InputLabel$2, null, e.label),
-            React__default.createElement(Select$2, __assign({ fullWidth: true, multiple: true, id: e.key, type: e.type, label: i18n['label'], placeholder: i18n['placeHolder'], 
+            React__default.createElement(InputLabel$2, { id: e.key }, i18n['label']),
+            React__default.createElement(Select$2, __assign({ multiple: true, id: e.key, type: e.type, label: i18n['label'], labelId: e.key, placeholder: i18n['placeHolder'], 
                 // set the default value here
                 defaultValue: i18n['defaultValue'] || [], error: errors[e.key] !== undefined }, register(e.key, {
                 required: (_a = e.validationRules) === null || _a === void 0 ? void 0 : _a.required,
@@ -16802,7 +16802,10 @@ var generateInputMultiSelect = function (dynamicForm, e, register, errors, watch
                         ? event.target.value.split(',')
                         : event.target.value;
                     setValue(e.key, newValue);
-                }, input: React__default.createElement(OutlinedInput$2, { label: "Tag" }), renderValue: function (selected) { return (typeof selected === 'string' ? selected.split(',').join(', ') : selected.join(', ')); }, MenuProps: MenuProps, 
+                }, 
+                // this will corrupt label, ex will be over line
+                // input={<OutlinedInput label="Tag" />}
+                renderValue: function (selected) { return (typeof selected === 'string' ? selected.split(',').join(', ') : selected.join(', ')); }, MenuProps: MenuProps, 
                 // inject styles
                 sx: (_d = (_c = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _c === void 0 ? void 0 : _c.styles) === null || _d === void 0 ? void 0 : _d.multiSelect }), Array.isArray(e.options) && ((_e = e.options) === null || _e === void 0 ? void 0 : _e.map(function (option) {
                 var _a = getOptionsValueAndLabel(i18nFn, option), value = _a[0], label = _a[1];
@@ -16810,7 +16813,7 @@ var generateInputMultiSelect = function (dynamicForm, e, register, errors, watch
                     React__default.createElement(Checkbox, { checked: currentValue.includes(value) }),
                     React__default.createElement(ListItemText, { primary: label })));
             }))),
-            errorMessage ? React__default.createElement(Typography, { variant: "caption", color: "error" }, errorMessage) : React__default.createElement(FormHelperText$2, null, i18n['helperText']))));
+            errorMessage ? React__default.createElement(Typography, { sx: { ml: 2, mt: '3px' }, variant: "caption", color: "error" }, errorMessage) : React__default.createElement(FormHelperText$2, null, i18n['helperText']))));
 };
 var generateInputRadio = function (dynamicForm, e, errors, control, i18nFn) {
     var _a, _b;
@@ -16828,7 +16831,7 @@ var generateInputRadio = function (dynamicForm, e, errors, control, i18nFn) {
         React__default.createElement(FormControl$2
         // inject dynamicAttributesFormControl
         , __assign({}, dynamicAttributesFormControl),
-            React__default.createElement(FormLabel$2, null, e.label),
+            React__default.createElement(FormLabel$2, null, i18n['label']),
             React__default.createElement(Controller, __assign({ name: e.key, defaultValue: i18n['defaultValue'] }, dynamicAttributes, { control: control, render: function (_a) {
                     var _b;
                     var field = _a.field; _a.fieldState; _a.formState;
@@ -16839,7 +16842,7 @@ var generateInputRadio = function (dynamicForm, e, errors, control, i18nFn) {
                 }, 
                 // inject styles
                 sx: (_b = (_a = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _a === void 0 ? void 0 : _a.styles) === null || _b === void 0 ? void 0 : _b.radio })),
-            errorMessage ? React__default.createElement(Typography, { variant: "caption", color: "error" }, errorMessage) : React__default.createElement(FormHelperText$2, null, i18n['helperText']))));
+            errorMessage ? React__default.createElement(Typography, { sx: { ml: 2, mt: '3px' }, variant: "caption", color: "error" }, errorMessage) : React__default.createElement(FormHelperText$2, null, i18n['helperText']))));
 };
 var generateInputCheckBox = function (dynamicForm, e, register, watch, i18nFn) {
     var _a, _b, _c;
