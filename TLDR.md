@@ -1,5 +1,38 @@
 # TLDR
 
+- [TLDR](#tldr)
+  - [Dual Repo Notes](#dual-repo-notes)
+  - [Requirements](#requirements)
+  - [Clone Projects](#clone-projects)
+  - [open Vscode at](#open-vscode-at)
+  - [Dev Environment](#dev-environment)
+    - [Start Dev Env](#start-dev-env)
+    - [Debug](#debug)
+      - [Add Breakpoints](#add-breakpoints)
+  - [Always use git scripts to work with dual projects git](#always-use-git-scripts-to-work-with-dual-projects-git)
+  - [Build and use package with c3-frontend consumer](#build-and-use-package-with-c3-frontend-consumer)
+    - [c3-frontend](#c3-frontend)
+    - [now in Package clk-react-dynamic-form](#now-in-package-clk-react-dynamic-form)
+  - [Fix cache mistery /now this is not need, this problems are solved with `yalc link`](#fix-cache-mistery-now-this-is-not-need-this-problems-are-solved-with-yalc-link)
+  - [launch Debugger](#launch-debugger)
+    - [Debug Consumer App](#debug-consumer-app)
+    - [Debug package](#debug-package)
+  - [Problems](#problems)
+    - [old Node 16 Dependency Error](#old-node-16-dependency-error)
+      - [Gemini](#gemini)
+      - [Problem](#problem)
+      - [Solution](#solution)
+        - [0. Enter Path](#0-enter-path)
+        - [1. The "Clean Slate" Preparation](#1-the-clean-slate-preparation)
+        - [2. Bump Core Dependencies](#2-bump-core-dependencies)
+        - [3. Update the browserslist](#3-update-the-browserslist)
+        - [4. Handle Webpack 5 "Node Polyfills" (Important)](#4-handle-webpack-5-node-polyfills-important)
+        - [5. Fix the Entry Point (React 18 Change)](#5-fix-the-entry-point-react-18-change)
+        - [6. Final Test Run](#6-final-test-run)
+  - [Check Map Files](#check-map-files)
+    - [Update `tsconfig.json`](#update-tsconfigjson)
+    - [Update `rollup.config.mjs`](#update-rollupconfigmjs)
+
 ## Dual Repo Notes
 
 warn this project is splitted in two distintict projects
@@ -46,7 +79,9 @@ $ tree -L 3
 
 - `/home/c3/TypescriptReactClkReactDynamicFormProjects`
 
-## Start Dev Env
+## Dev Environment
+
+### Start Dev Env
 
 ```shell
 # enter project path
@@ -84,9 +119,9 @@ webpack compiled successfully
 No issues found.
 ```
 
-TODO: how to use package in backend and how to publicsh it
+### Debug
 
-## Add Breakpoints
+#### Add Breakpoints
 
 add breakpoint here `e.target.reset();`
 
@@ -124,15 +159,179 @@ or here `setGlobalError(null);`, this is the better place, after all renders are
 
 now launch the debugger with F5
 
-## TODO: Always use git scripts to work with dual projects git
+![image](attachments/2026-01-16-15-05-11.png)
 
-- Commit/Push All:	`pnpm git:sync "feature: added forms"`
+![image](attachments/2026-01-16-15-06-19.png)
+
+all done debug works in **consumer app** and in **package**
+
+## Always use git scripts to work with dual projects git
+
+- Commit/Push All:`pnpm git:sync "feature: added forms"`
 - Pull All: `pnpm git:pull`
 - Checkout Branch (All): `pnpm git:checkout main`
 - Sync Only Child: `pnpm git:sync "fix: child component" child`
 - Sync Only Root: `pnpm git:sync "chore: update root" root`
 
-## Build project to use with c3-frontend consumer
+## Build and use package with c3-frontend consumer
+
+### c3-frontend
+
+```shell
+$ git clone https://bitbucket.org/criticallinksteam/c3-frontend
+$ cd c3-frontend
+$ git checkout develop
+$ npm i --legacy-peer-deps
+```
+
+now in frontend
+
+```shell
+# yalc add clk-react-dynamic-form@1.0.11
+# now always use link, this is the trick
+
+# if we use add we need to remove it first, aftre we have publish it in clk-react-dynamic-form with `"build:publish:push"` script
+$ yalc remove clk-react-dynamic-form
+
+# now link it
+# yalc link clk-react-dynamic-form@1.0.11
+$ yalc link clk-react-dynamic-form
+Package clk-react-dynamic-form@1.0.11 linked ==> /tmp/c3-frontend/node_modules/clk-react-dynamic-form
+```
+
+great news: `yalc link` doesn't change `"clk-react-dynamic-form": "^1.0.11"` in `package.json`
+
+Use `yalc link` instead of `yalc add`
+
+There is a subtle difference:
+
+- `yalc add` copies files and changes package.json.
+- `yalc link` creates a symlink.
+
+> Often, development servers track symlinks more aggressively. Try this in your consumer app
+
+`yalc link` makes all the magic it even works with hotreload, now whwn I change something in package I just need to
+
+optionaly add to `config-overrides.js`
+
+```js
+const webpack = require('webpack');
+
+// require env here
+module.exports = function override(config, env) {
+
+  ...
+
+  // clk-react-dynamic-form
+  if (env === 'development') {
+    // disable "managedPaths" for your package
+    // this tells Webpack: "Don't assume node_modules/clk-react-dynamic-form is immutable"
+    config.snapshot = {
+      ...config.snapshot,
+      managedPaths: [
+        /^(.+?[\\/]node_modules[\\/])(?!clk-react-dynamic-form)/
+      ],
+    };
+
+    // ensure the cache is invalidated if the .yalc folder changes
+    config.cache = {
+      type: 'filesystem',
+      buildDependencies: {
+        config: [__filename],
+        // invalidate cache if yalc.lock changes
+        yalc: ['./yalc.lock'] 
+      },
+    };
+  }
+}
+```
+
+now run `start:debug` script
+
+```shell
+$ npm run start:debug
+```
+
+launch debugger with `F5` top open window
+
+> to debug the package always ue the `clk-react-dynamic-form-consumer-app`
+
+### now in Package clk-react-dynamic-form
+
+cgane some visible thing to prove that c3-frontend will get changes from package
+
+- `NewRollUpClkReactDynamicForm/clk-react-dynamic-form/src/components/DynamicFormComponent.tsx`
+
+for ex change
+
+```tsx
+{getI18nValue(i18nFn, tool?.form?.i18n?.buttons?.reset, 'Reset')}
+```
+
+to
+
+```tsx
+{/* {getI18nValue(i18nFn, tool?.form?.i18n?.buttons?.reset, 'Reset')} */}
+CHANGED
+```
+
+```shell
+$ cd NewRollUpClkReactDynamicForm/clk-react-dynamic-form
+$ pnpm build:publish:push
+
+src/index.ts → dist/index.esm.js...
+created dist/index.esm.js in 4.6s
+clk-react-dynamic-form@1.0.11 published in store.
+clk-react-dynamic-form@1.0.11 published in store.
+Pushing clk-react-dynamic-form@1.0.11 in /home/c3/c3-frontend
+Package clk-react-dynamic-form@1.0.11 linked ==> /home/c3/c3-frontend/node_modules/clk-react-dynamic-form
+```
+
+> we see here c3-frontend project after we add it and re-build it with `pnpm build:publish:push`, ex `/home/c3/c3-frontend/node_modules/clk-react-dynamic-form`
+
+and without touch anything I see the buttons change with hotreload
+
+sometimes we need a refresh, hot reload will not work, but is good for me the way it works
+but when it works, it always works, like we can make as many changes as we like in package and it will always reload and show changes
+
+That is fantastic news! Switching from `yalc add` to `yalc link` is the "secret sauce" for hot reloading because it creates a symbolic link that the Webpack file watcher can follow directly.
+
+## Fix cache mistery /now this is not need, this problems are solved with `yalc link`
+
+It sounds like you are experiencing the classic "Yalc cache/build" mystery. Since your build:publish:push script is running correctly and even reports that it pushed to /home/c3-frontend, the issue is likely not in the connection, but in how the consumer app (c3-frontend) is resolving or caching the files.
+
+Here are the most likely reasons why you aren't seeing your changes and how to fix them:
+
+1. The `yalc push` vs. `node_modules` Cache
+
+Even though `yalc push` updates the files in `node_modules`, Webpack (via `react-app-rewired`) often caches build results in a `.cache` folder.
+
+The Fix: Stop the consumer app and clear the cache before restarting:
+
+```shell
+# In c3-frontend
+$ rm -rf node_modules/.cache
+$ npm run start:debug
+```
+
+now we don't have any cache problems
+
+or
+
+The Fix: Try forcing yalc to use a physical copy instead of a link:
+
+Bash
+
+```shell
+# In c3-frontend
+$ yalc add --pure clk-react-dynamic-form
+```
+
+> The `--pure` flag ensures it doesn't touch your package.json, just the local files
+
+
+
+
 
 ```
 # split #1
@@ -145,16 +344,8 @@ $ cd NewRollUpClkReactDynamicForm/clk-react-dynamic-form-consumer-app
 $ npm run dev:cleanup
 ```
 
-> sometimes after packages was rebuil, let consumer app rebuild and broswer refresh alone and it works
 
-
-![image](attachments/2026-01-16-15-05-11.png)
-
-![image](attachments/2026-01-16-15-06-19.png)
-
-all done debug works in consumer app and in package
-
-
+> sometimes after packages was rebuild, let consumer app rebuild and browser refresh alone and it works
 
 
 
@@ -199,7 +390,11 @@ add a breakpoint to `setTool(data);` line
 
 ## Problems
 
-### old Node 16 Dependency: Error: error:0308010C:digital envelope routines::unsupported
+### old Node 16 Dependency Error
+
+```shell
+Error: error:0308010C:digital envelope routines::unsupported
+```
 
 #### Gemini
 
@@ -370,89 +565,21 @@ $ npm run dev:cleanup
 If you see "Module not found: Error: Can't resolve 'fs/path/crypto'..."
 This is the only common "gotcha" when moving to react-scripts 5. If it happens, would you like me to provide the craco configuration to add those polyfills back?
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-big gemini chat
-https://gemini.google.com/app/17f215e12c199f53
-
-Note: Make sure your VS Code "Folder" is opened at the root: /home/c3/TypescriptReactClkReactDynamicFormProjects
-
+## Check Map Files
 
 ```shell
-$ cd /home/c3/TypescriptReactClkReactDynamicFormProjects
-# term1
-$ pnpm --filter clk-react-dynamic-form watch
-# term2
-$ pnpm --filter clk-react-dynamic-form-consumer-app start
-```
-
-
-
-project #1
-
-$ find . -name *.map
-./dist/index.js.map
-./dist/index.esm.js.map
-./dist/interfaces/dynamic-form.interface.d.ts.map
-./dist/interfaces/dynamic-text-field-props.interface.d.ts.map
-./dist/interfaces/index.d.ts.map
-./dist/interfaces/tool.interface.d.ts.map
-./dist/interfaces/controller-render-props-field.interface.d.ts.map
-./dist/interfaces/prompt.interface.d.ts.map
-./dist/components/DynamicFormComponent.d.ts.map
-./dist/components/MyForm.d.ts.map
-./dist/enums/dynamic-form.enum.d.ts.map
-./dist/enums/index.d.ts.map
-./dist/types/dynamic-form.type.d.ts.map
-./dist/types/index.d.ts.map
-./dist/lib/dynamic-form.d.ts.map
-./dist/utils/main.d.ts.map
-./dist/utils/index.d.ts.map
-./dist/index.d.ts.map
-
-project #2
-
-"build": "clear && rollup -c"
-
-$ pnpm build
-src/index.ts → dist/index.js, dist/index.esm.js...
-created dist/index.js, dist/index.esm.js in 4.1s
-
 $ find . -name *.map
 
 no files found
+```
 
+The reason your `.map` files are missing in **Project #2** is that **Rollup** and **TypeScript** operate independently regarding **sourcemaps**. Even if your code compiles, you must **explicitly tell both** the **TypeScript plugin** (to generate maps for definitions) and the **Rollup output** (to generate maps for the bundles).
 
+### Update `tsconfig.json`
 
+To get the `.d.ts.map` files (declaration maps) you see in **Project #1**, you must add `declarationMap: true` and `sourceMap: true`
 
-
-
-
-
-The reason your .map files are missing in Project #2 is that Rollup and TypeScript operate independently regarding sourcemaps. Even if your code compiles, you must explicitly tell both the TypeScript plugin (to generate maps for definitions) and the Rollup output (to generate maps for the bundles).
-
-
-1. Update tsconfig.json
-
-To get the .d.ts.map files (declaration maps) you see in Project #1, you must add declarationMap: true and sourceMap: true.
-
-add 
+in `NewRollUpClkReactDynamicForm/clk-react-dynamic-form/tsconfig.json`
 
 ```json
 {
@@ -463,34 +590,33 @@ add
 }
 ```
 
-ok now we have .map files
+now after build we have `.map` files
 
+```shell
+$ find NewRollUpClkReactDynamicForm/clk-react-dynamic-form -name *.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/index.js.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/index.esm.js.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/interfaces/dynamic-form.interface.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/interfaces/dynamic-text-field-props.interface.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/interfaces/index.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/interfaces/tool.interface.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/interfaces/controller-render-props-field.interface.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/interfaces/prompt.interface.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/components/DynamicFormComponent.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/components/MyForm.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/enums/dynamic-form.enum.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/enums/index.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/types/dynamic-form.type.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/types/index.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/lib/dynamic-form.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/utils/main.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/utils/index.d.ts.map
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form/dist/index.d.ts.map
 ```
-$ find . -name *.map
-./dist/interfaces/dynamic-form.interface.d.ts.map
-./dist/interfaces/dynamic-text-field-props.interface.d.ts.map
-./dist/interfaces/index.d.ts.map
-./dist/interfaces/tool.interface.d.ts.map
-./dist/interfaces/controller-render-props-field.interface.d.ts.map
-./dist/interfaces/prompt.interface.d.ts.map
-./dist/components/DynamicFormComponent.d.ts.map
-./dist/components/MyForm.d.ts.map
-./dist/enums/dynamic-form.enum.d.ts.map
-./dist/enums/index.d.ts.map
-./dist/types/dynamic-form.type.d.ts.map
-./dist/types/index.d.ts.map
-./dist/lib/dynamic-form.d.ts.map
-./dist/utils/main.d.ts.map
-./dist/utils/index.d.ts.map
-./dist/index.d.ts.map
-```
 
-but breakpoints doesn't work
+### Update `rollup.config.mjs`
 
-
-2. Update rollup.config.mjs
-
-To get the index.js.map and index.esm.js.map files, you must add sourcemap: true to each output object.
+To get the `index.js.map` and `index.esm.js.map` files, you must add `sourcemap: true` to each output object.
 
 add this
 
@@ -518,17 +644,9 @@ export default {
 }
 ```
 
-
 Why they disappeared:
-declarationMap: This generates the link between your .d.ts files and your .ts source code. Without it, VS Code can't "Go to Definition" into your library's actual source code.
 
-sourcemap: true (in output): This tells Rollup to take the mapping data provided by the TypeScript plugin and write it to the physical .map files in the dist folder.
+declarationMap: This generates the link between your `.d.ts` files and your `.ts` source code.
+Without it, VS Code can't "Go to Definition" into your library's actual source code.
 
-
-
-
-
-
-
-
-always pull/push both proejcts
+`sourcemap: true` (in output): This tells Rollup to take the mapping data provided by the TypeScript plugin and write it to the physical .map files in the dist folder.
