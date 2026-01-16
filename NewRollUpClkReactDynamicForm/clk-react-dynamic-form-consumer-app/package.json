@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:cleanup": "npm cache clean --force || true && npm rm clk-react-dynamic-form-consumer || true && yalc add clk-react-dynamic-form || true && npm i && npm run start",
+    "-dev:cleanup": "npm cache clean --force || true && npm rm clk-react-dynamic-form-consumer || true && yalc add clk-react-dynamic-form || true && npm i && npm run start",
+    "dev": "npm run start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -18,7 +19,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "babel-preset-react-app": "^10.0.1",
-    "clk-react-dynamic-form": "file:.yalc/clk-react-dynamic-form",
+    "clk-react-dynamic-form": "link:../clk-react-dynamic-form",
     "react-hook-form": "^7.53.1",
     "web-vitals": "^2.1.4"
   },

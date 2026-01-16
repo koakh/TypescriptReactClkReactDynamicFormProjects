@@ -1,6 +1,9 @@
 .bak/*.tgz
+.removed
 **/node_modules/**
 NewRollUpClkReactDynamicForm/clk-react-dynamic-form-1.0.5-before-start-to-use-clk-repo
 NewRollUpClkReactDynamicForm/clk-react-dynamic-form-consumer-app/.yalc
 NewRollUpClkReactDynamicForm/clk-react-dynamic-form-consumer-app/yalc.lock
 NewRollUpClkReactDynamicForm/clk-react-dynamic-form-consumer-app/.yalc/clk-react-dynamic-form
+# this is a sub git repo that must be checkout and comiit alone of the mais project
+NewRollUpClkReactDynamicForm/clk-react-dynamic-form

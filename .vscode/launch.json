@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Debug Workspace",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/clk-react-dynamic-form-consumer-app",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack://*/../clk-react-dynamic-form/src/*": "${workspaceFolder}/clk-react-dynamic-form/src/*",
+        "webpack:///./src/*": "${workspaceFolder}/clk-react-dynamic-form-consumer-app/src/*",
+        "../*": "${workspaceFolder}/clk-react-dynamic-form/*"
+      }
+    }
+  ]
+}

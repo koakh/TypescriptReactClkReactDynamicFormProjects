@@ -15,7 +15,6 @@ export interface DynamicForm {
   actions: { [key: string]: any };
   properties: { [key: string]: any };
   i18n: { [key: string]: any };
-  prompts: { [key: string]: any };
 }
 
 export interface DynamicFormElementValidationRules {

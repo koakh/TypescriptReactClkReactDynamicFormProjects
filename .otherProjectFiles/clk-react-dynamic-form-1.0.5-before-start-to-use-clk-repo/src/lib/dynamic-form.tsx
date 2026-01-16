@@ -8,8 +8,6 @@ import { parseValidationRules } from '../utils/main';
 import { DynamicTextFieldProps } from '../interfaces';
 import { ControllerRenderProps } from '../interfaces/controller-render-props-field.interface';
 
-const i18nPrefix = 'micropal:';
-
 /**
  * get react hook form validation object
  * @param e dynamic form element
@@ -159,22 +157,6 @@ export const getI18nValue = (i18nFn: (input: string, startWith?: string) => stri
   return value ? i18nFn(value) : defaultValue
 }
 
-const getOptionsValueAndLabel = (i18nFn: (input: string, startWith?: string) => string, option: string): [string, string] => {
-  // if `micropal:tools.quiz_generator.type_of_questions.option1`
-  // always pass value in getI18nValue, and override if includes : and not start with i18nPrefix
-  let value = getI18nValue(i18nFn, option);
-  let label = value;
-  // override defaults: `value:micropal:tools.quiz_generator.type_of_questions.option1`
-  if (option.includes(':') && !option.startsWith(i18nPrefix)) {
-    // beginner:micropal:tools.lesson-planner.skill_level.option1
-    // get first part ex beginner
-    value = option.split(':')[0];
-    // get second part without split with ex `micropal:tools.lesson_planner.skill_level.option1`
-    label = getI18nValue(i18nFn, option.substring(option.indexOf(':') + 1));
-  }
-  return [value, label]
-}
-
 export const getI18nElementValues = (i18nFn: (input: string, startWith?: string) => string, e: DynamicFormElement) => {
   const result: Partial<Pick<DynamicFormElement, 'label' | 'placeHolder' | 'helperText' | 'defaultValue'>> = {};
   const i18nFields = ['label', 'placeHolder', 'helperText', 'defaultValue'] as const;
@@ -313,12 +295,11 @@ const generateInputSelect = (
         // inject dynamicAttributesFormControl
         {...dynamicAttributesFormControl}
       >
-        <InputLabel id={e.key}>{i18n['label']}</InputLabel>
+        <InputLabel>{e.label}</InputLabel>
         <Select
           id={e.key}
           type={e.type}
           label={i18n['label']}
-          labelId={e.key}
           placeholder={i18n['placeHolder']}
           defaultValue={i18n['defaultValue']}
           // register element
@@ -338,12 +319,21 @@ const generateInputSelect = (
           // inject styles
           sx={dynamicForm?.properties?.styles?.select}
         >
-          {Array.isArray(e.options) && e.options?.map((option) => {
-            const [value, label] = getOptionsValueAndLabel(i18nFn, option);
+          {Array.isArray(e.options) && e.options?.map((e) => {
+            let value = e;
+            let label = getI18nValue(i18nFn, e);
+            // override defaults
+            if (e.includes(':')) {
+              // beginner:micropal-tools.lesson-planner.skill_level.option1
+              // get first part ex beginner
+              value = e.split(':')[0];
+              // get second part without split with ex `micropal:tools.lesson-planner.skill_level.option1`
+              label = getI18nValue(i18nFn, e.substring(e.indexOf(':') + 1));
+            }
             return <MenuItem key={value} value={value}>{label}</MenuItem>
           })}
         </Select>
-        {errorMessage ? <Typography sx={{ ml: 2, mt: '3px' }} variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
+        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
       </FormControl>
     </div>
   );
@@ -391,13 +381,12 @@ const generateInputMultiSelect = (
         // inject dynamic properties
         {...dynamicAttributesFormControl}
       >
-        <InputLabel id={e.key}>{i18n['label']}</InputLabel>
-        <Select
+        <InputLabel>{e.label}</InputLabel>
+        <Select fullWidth
           multiple
           id={e.key}
           type={e.type}
           label={i18n['label']}
-          labelId={e.key}
           placeholder={i18n['placeHolder']}
           // set the default value here
           defaultValue={i18n['defaultValue'] || []}
@@ -420,8 +409,7 @@ const generateInputMultiSelect = (
               : event.target.value;
             setValue(e.key, newValue);
           }}
-          // this will corrupt label, ex will be over line
-          // input={<OutlinedInput label="Tag" />}
+          input={<OutlinedInput label="Tag" />}
           renderValue={(selected: string | string[]) => (
             typeof selected === 'string' ? selected.split(',').join(', ') : selected.join(', ')
           )}
@@ -429,17 +417,14 @@ const generateInputMultiSelect = (
           // inject styles
           sx={dynamicForm?.properties?.styles?.multiSelect}
         >
-          {Array.isArray(e.options) && e.options?.map((option) => {
-            const [value, label] = getOptionsValueAndLabel(i18nFn, option);
-            return (
-              <MenuItem key={option} value={value}>
-                <Checkbox checked={currentValue.includes(value)} />
-                <ListItemText primary={label} />
-              </MenuItem>
-            )
-          })}
+          {Array.isArray(e.options) && e.options?.map((option) => (
+            <MenuItem key={option} value={option.split(':')[0]}>
+              <Checkbox checked={currentValue.includes(option.split(':')[0])} />
+              <ListItemText primary={option.split(':')[1] ? option.substring(option.indexOf(':') + 1) : option.split(':')[0]} />
+            </MenuItem>
+          ))}
         </Select>
-        {errorMessage ? <Typography sx={{ ml: 2, mt: '3px' }} variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
+        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
       </FormControl>
     </div>
   );
@@ -470,7 +455,7 @@ const generateInputRadio = (
         // inject dynamicAttributesFormControl
         {...dynamicAttributesFormControl}
       >
-        <FormLabel>{i18n['label']}</FormLabel>
+        <FormLabel>{e.label}</FormLabel>
         <Controller
           name={e.key}
           defaultValue={i18n['defaultValue']}
@@ -480,8 +465,17 @@ const generateInputRadio = (
           render={({ field, fieldState, formState }: ControllerRenderProps<FieldValues>) => (
             <RadioGroup {...field}
             >
-              {Array.isArray(e.options) && e.options?.map((option) => {
-                const [value, label] = getOptionsValueAndLabel(i18nFn, option);
+              {Array.isArray(e.options) && e.options?.map((e) => {
+                let value = e;
+                let label = getI18nValue(i18nFn, e);
+                // override defaults
+                if (e.includes(':')) {
+                  // beginner:micropal-tools.lesson-planner.skill_level.option1
+                  // get first part ex beginner
+                  value = e.split(':')[0];
+                  // get second part without split with ex `micropal:tools.lesson-planner.skill_level.option1`
+                  label = getI18nValue(i18nFn, e.substring(e.indexOf(':') + 1));
+                }
                 return <FormControlLabel key={value} label={getI18nValue(i18nFn, label)} value={value} control={<Radio />} />
               })}
             </RadioGroup>
@@ -489,7 +483,7 @@ const generateInputRadio = (
           // inject styles
           sx={dynamicForm?.properties?.styles?.radio}
         />
-        {errorMessage ? <Typography sx={{ ml: 2, mt: '3px' }} variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
+        {errorMessage ? <Typography variant="caption" color="error">{errorMessage}</Typography> : <FormHelperText>{i18n['helperText']}</FormHelperText>}
       </FormControl>
     </div>);
 }

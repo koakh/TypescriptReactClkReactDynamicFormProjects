@@ -1,11 +1,42 @@
 # TLDR
 
-## Start Dev Env
+## Dual Repo Notes
+
+warn this project is splitted in two distintict projects
+
+- [TypescriptReactClkReactDynamicFormProjects](https://github.com/koakh/TypescriptReactClkReactDynamicFormProjects.git)
+
+  this have all things, less `clk-react-dynamic-form`, we only expose `clk-react-dynamic-form` to critical-links repo, leaving all other things in privat project
+
+- [clk-react-dynamic-form](https://bitbucket.org/criticallinksteam/clk-react-dynamic-form/src/main/)
+
+  critical-links repo `clk-react-dynamic-form`
+
+- /home/c3/TypescriptReactClkReactDynamicFormProjects/.git/config
+  .git/config
+
+- /home/c3/TypescriptReactClkReactDynamicFormProjects/NewRollUpClkReactDynamicForm/clk-react-dynamic-form/.git/config
+
+## Requirments
 
 ```shell
 $ node -v
 v22.14.0
+```
 
+## Clone Projects
+
+```shell
+$ git clone https://github.com/koakh/TypescriptReactClkReactDynamicFormProjects.git
+```
+
+## open Vscode at
+
+- `/home/c3/TypescriptReactClkReactDynamicFormProjects`
+
+## Start Dev Env
+
+```shell
 # split #1
 $ cd NewRollUpClkReactDynamicForm/clk-react-dynamic-form
 $ npm run build:publish:push
@@ -17,6 +48,45 @@ $ npm run dev:cleanup
 ```
 
 > sometimes after packages was rebuil, let consumer app rebuild and broswer refresh alone and it works
+
+## launch Debugger
+
+launch debuger with F5 to debug consumer app at same time
+
+package `clk-react-dynamic-form-consumer-app` debug, doesn't work with symbolic links, to do that we must move the directory ex
+
+### Debug Consumer App
+
+add a breakpoint to `setTool(data);` line
+
+- `NewRollUpClkReactDynamicForm/clk-react-dynamic-form-consumer-app/src/App.tsx`
+
+```ts
+  useEffect(() => {
+    let isMounted = true;
+    fetch(apiEndpointGetToolId, { headers })
+      .then((response) => response.json())
+      .then((data: Tool) => {
+        if (isMounted) {
+          setTool(data);
+        }
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+```
+
+### Debug package
+
+
+
+
+
+
+
+
+
 
 ## Problems
 
@@ -190,3 +260,65 @@ $ npm run dev:cleanup
 
 If you see "Module not found: Error: Can't resolve 'fs/path/crypto'..."
 This is the only common "gotcha" when moving to react-scripts 5. If it happens, would you like me to provide the craco configuration to add those polyfills back?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+big gemini chat
+https://gemini.google.com/app/17f215e12c199f53
+
+Note: Make sure your VS Code "Folder" is opened at the root: /home/c3/TypescriptReactClkReactDynamicFormProjects
+
+
+```shell
+$ cd /home/c3/TypescriptReactClkReactDynamicFormProjects
+# term1
+$ pnpm --filter clk-react-dynamic-form watch
+# term2
+$ pnpm --filter clk-react-dynamic-form-consumer-app start
+```
+
+add breakpoint here `e.target.reset();`
+
+```ts
+  // OPT #2
+  const onSubmit = (data: any, e: any, tool: Tool) => {
+    // reset after form submit
+    e.target.reset();
+    // required react hook form reset to
+    reset();
+    // console.log(`onSubmit data: ${JSON.stringify(data)}`);
+    let payload = data;
+```
+
+or here `setGlobalError(null);`
+
+```tsx
+          <Button variant='contained'
+            type="reset"
+            sx={tool?.form?.properties?.styles?.button}
+            // onClick={reset as MouseEventHandler<HTMLButtonElement>}
+            onClick={() => {
+              // console.log(`tool.form?.elements: [${JSON.stringify(tool.form?.elements, undefined, 2)}]`);
+              // console.log(`${JSON.stringify(tool.form?.elements?.find(e => e.key === 'subject')?.defaultValue, undefined, 2)}`);
+              // clear previous errors
+              setGlobalError(null);
+              setGlobalErrors({});
+              reset();
+            }}
+```

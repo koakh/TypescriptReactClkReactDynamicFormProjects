@@ -15,9 +15,6 @@ export interface DynamicForm {
     i18n: {
         [key: string]: any;
     };
-    prompts: {
-        [key: string]: any;
-    };
 }
 export interface DynamicFormElementValidationRules {
     required?: boolean | string;

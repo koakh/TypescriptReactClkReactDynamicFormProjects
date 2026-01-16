@@ -16551,7 +16551,6 @@ var parseValidationRules = function (jsonRules) {
     });
 };
 
-var i18nPrefix = 'micropal:';
 /**
  * get react hook form validation object
  * @param e dynamic form element
@@ -16670,21 +16669,6 @@ var getI18nValue = function (i18nFn, value, defaultValue) {
     if (defaultValue === void 0) { defaultValue = "invalid defaultValue"; }
     return value ? i18nFn(value) : defaultValue;
 };
-var getOptionsValueAndLabel = function (i18nFn, option) {
-    // if `micropal:tools.quiz_generator.type_of_questions.option1`
-    // always pass value in getI18nValue, and override if includes : and not start with i18nPrefix
-    var value = getI18nValue(i18nFn, option);
-    var label = value;
-    // override defaults: `value:micropal:tools.quiz_generator.type_of_questions.option1`
-    if (option.includes(':') && !option.startsWith(i18nPrefix)) {
-        // beginner:micropal:tools.lesson-planner.skill_level.option1
-        // get first part ex beginner
-        value = option.split(':')[0];
-        // get second part without split with ex `micropal:tools.lesson_planner.skill_level.option1`
-        label = getI18nValue(i18nFn, option.substring(option.indexOf(':') + 1));
-    }
-    return [value, label];
-};
 var getI18nElementValues = function (i18nFn, e) {
     var result = {};
     var i18nFields = ['label', 'placeHolder', 'helperText', 'defaultValue'];
@@ -16760,8 +16744,8 @@ var generateInputSelect = function (dynamicForm, e, register, errors, watch, i18
         React.createElement(material.FormControl
         // inject dynamicAttributesFormControl
         , __assign({}, dynamicAttributesFormControl),
-            React.createElement(material.InputLabel, { id: e.key }, i18n['label']),
-            React.createElement(material.Select, __assign({ id: e.key, type: e.type, label: i18n['label'], labelId: e.key, placeholder: i18n['placeHolder'], defaultValue: i18n['defaultValue'] }, register(e.key, {
+            React.createElement(material.InputLabel, null, e.label),
+            React.createElement(material.Select, __assign({ id: e.key, type: e.type, label: i18n['label'], placeholder: i18n['placeHolder'], defaultValue: i18n['defaultValue'] }, register(e.key, {
                 required: (_a = e.validationRules) === null || _a === void 0 ? void 0 : _a.required,
                 min: ((_b = e.validationRules) === null || _b === void 0 ? void 0 : _b.min) ? getNumberValidation((_c = e.validationRules) === null || _c === void 0 ? void 0 : _c.min) : undefined,
                 max: ((_d = e.validationRules) === null || _d === void 0 ? void 0 : _d.max) ? getNumberValidation((_e = e.validationRules) === null || _e === void 0 ? void 0 : _e.max) : undefined,
@@ -16773,11 +16757,20 @@ var generateInputSelect = function (dynamicForm, e, register, errors, watch, i18
                 // required for reset form works
                 value: currentValue, 
                 // inject styles
-                sx: (_m = (_l = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _l === void 0 ? void 0 : _l.styles) === null || _m === void 0 ? void 0 : _m.select }), Array.isArray(e.options) && ((_o = e.options) === null || _o === void 0 ? void 0 : _o.map(function (option) {
-                var _a = getOptionsValueAndLabel(i18nFn, option), value = _a[0], label = _a[1];
+                sx: (_m = (_l = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _l === void 0 ? void 0 : _l.styles) === null || _m === void 0 ? void 0 : _m.select }), Array.isArray(e.options) && ((_o = e.options) === null || _o === void 0 ? void 0 : _o.map(function (e) {
+                var value = e;
+                var label = getI18nValue(i18nFn, e);
+                // override defaults
+                if (e.includes(':')) {
+                    // beginner:micropal-tools.lesson-planner.skill_level.option1
+                    // get first part ex beginner
+                    value = e.split(':')[0];
+                    // get second part without split with ex `micropal:tools.lesson-planner.skill_level.option1`
+                    label = getI18nValue(i18nFn, e.substring(e.indexOf(':') + 1));
+                }
                 return React.createElement(material.MenuItem, { key: value, value: value }, label);
             }))),
-            errorMessage ? React.createElement(material.Typography, { sx: { ml: 2, mt: '3px' }, variant: "caption", color: "error" }, errorMessage) : React.createElement(material.FormHelperText, null, i18n['helperText']))));
+            errorMessage ? React.createElement(material.Typography, { variant: "caption", color: "error" }, errorMessage) : React.createElement(material.FormHelperText, null, i18n['helperText']))));
 };
 var generateInputMultiSelect = function (dynamicForm, e, register, errors, watch, setValue, i18nFn) {
     var _a, _b, _c, _d, _e;
@@ -16806,8 +16799,8 @@ var generateInputMultiSelect = function (dynamicForm, e, register, errors, watch
     var currentValue = watch(e.key) || e.defaultValue || [];
     return (React.createElement("div", null,
         React.createElement(material.FormControl, __assign({ sx: { mb: 1 /*, width: 300*/ } }, dynamicAttributesFormControl),
-            React.createElement(material.InputLabel, { id: e.key }, i18n['label']),
-            React.createElement(material.Select, __assign({ multiple: true, id: e.key, type: e.type, label: i18n['label'], labelId: e.key, placeholder: i18n['placeHolder'], 
+            React.createElement(material.InputLabel, null, e.label),
+            React.createElement(material.Select, __assign({ fullWidth: true, multiple: true, id: e.key, type: e.type, label: i18n['label'], placeholder: i18n['placeHolder'], 
                 // set the default value here
                 defaultValue: i18n['defaultValue'] || [], error: errors[e.key] !== undefined }, register(e.key, {
                 required: (_a = e.validationRules) === null || _a === void 0 ? void 0 : _a.required,
@@ -16822,18 +16815,12 @@ var generateInputMultiSelect = function (dynamicForm, e, register, errors, watch
                         ? event.target.value.split(',')
                         : event.target.value;
                     setValue(e.key, newValue);
-                }, 
-                // this will corrupt label, ex will be over line
-                // input={<OutlinedInput label="Tag" />}
-                renderValue: function (selected) { return (typeof selected === 'string' ? selected.split(',').join(', ') : selected.join(', ')); }, MenuProps: MenuProps, 
+                }, input: React.createElement(material.OutlinedInput, { label: "Tag" }), renderValue: function (selected) { return (typeof selected === 'string' ? selected.split(',').join(', ') : selected.join(', ')); }, MenuProps: MenuProps, 
                 // inject styles
-                sx: (_d = (_c = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _c === void 0 ? void 0 : _c.styles) === null || _d === void 0 ? void 0 : _d.multiSelect }), Array.isArray(e.options) && ((_e = e.options) === null || _e === void 0 ? void 0 : _e.map(function (option) {
-                var _a = getOptionsValueAndLabel(i18nFn, option), value = _a[0], label = _a[1];
-                return (React.createElement(material.MenuItem, { key: option, value: value },
-                    React.createElement(material.Checkbox, { checked: currentValue.includes(value) }),
-                    React.createElement(material.ListItemText, { primary: label })));
-            }))),
-            errorMessage ? React.createElement(material.Typography, { sx: { ml: 2, mt: '3px' }, variant: "caption", color: "error" }, errorMessage) : React.createElement(material.FormHelperText, null, i18n['helperText']))));
+                sx: (_d = (_c = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _c === void 0 ? void 0 : _c.styles) === null || _d === void 0 ? void 0 : _d.multiSelect }), Array.isArray(e.options) && ((_e = e.options) === null || _e === void 0 ? void 0 : _e.map(function (option) { return (React.createElement(material.MenuItem, { key: option, value: option.split(':')[0] },
+                React.createElement(material.Checkbox, { checked: currentValue.includes(option.split(':')[0]) }),
+                React.createElement(material.ListItemText, { primary: option.split(':')[1] ? option.substring(option.indexOf(':') + 1) : option.split(':')[0] }))); }))),
+            errorMessage ? React.createElement(material.Typography, { variant: "caption", color: "error" }, errorMessage) : React.createElement(material.FormHelperText, null, i18n['helperText']))));
 };
 var generateInputRadio = function (dynamicForm, e, errors, control, i18nFn) {
     var _a, _b;
@@ -16851,18 +16838,27 @@ var generateInputRadio = function (dynamicForm, e, errors, control, i18nFn) {
         React.createElement(material.FormControl
         // inject dynamicAttributesFormControl
         , __assign({}, dynamicAttributesFormControl),
-            React.createElement(material.FormLabel, null, i18n['label']),
+            React.createElement(material.FormLabel, null, e.label),
             React.createElement(reactHookForm.Controller, __assign({ name: e.key, defaultValue: i18n['defaultValue'] }, dynamicAttributes, { control: control, render: function (_a) {
                     var _b;
                     var field = _a.field; _a.fieldState; _a.formState;
-                    return (React.createElement(material.RadioGroup, __assign({}, field), Array.isArray(e.options) && ((_b = e.options) === null || _b === void 0 ? void 0 : _b.map(function (option) {
-                        var _a = getOptionsValueAndLabel(i18nFn, option), value = _a[0], label = _a[1];
+                    return (React.createElement(material.RadioGroup, __assign({}, field), Array.isArray(e.options) && ((_b = e.options) === null || _b === void 0 ? void 0 : _b.map(function (e) {
+                        var value = e;
+                        var label = getI18nValue(i18nFn, e);
+                        // override defaults
+                        if (e.includes(':')) {
+                            // beginner:micropal-tools.lesson-planner.skill_level.option1
+                            // get first part ex beginner
+                            value = e.split(':')[0];
+                            // get second part without split with ex `micropal:tools.lesson-planner.skill_level.option1`
+                            label = getI18nValue(i18nFn, e.substring(e.indexOf(':') + 1));
+                        }
                         return React.createElement(material.FormControlLabel, { key: value, label: getI18nValue(i18nFn, label), value: value, control: React.createElement(material.Radio, null) });
                     }))));
                 }, 
                 // inject styles
                 sx: (_b = (_a = dynamicForm === null || dynamicForm === void 0 ? void 0 : dynamicForm.properties) === null || _a === void 0 ? void 0 : _a.styles) === null || _b === void 0 ? void 0 : _b.radio })),
-            errorMessage ? React.createElement(material.Typography, { sx: { ml: 2, mt: '3px' }, variant: "caption", color: "error" }, errorMessage) : React.createElement(material.FormHelperText, null, i18n['helperText']))));
+            errorMessage ? React.createElement(material.Typography, { variant: "caption", color: "error" }, errorMessage) : React.createElement(material.FormHelperText, null, i18n['helperText']))));
 };
 var generateInputCheckBox = function (dynamicForm, e, register, watch, i18nFn) {
     var _a, _b, _c;

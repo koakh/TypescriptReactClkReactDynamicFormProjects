@@ -1,5 +1,5 @@
-import React from 'react';
 import { MyForm } from 'clk-react-dynamic-form';
+import React from 'react';
 
 function App() {
   return (
