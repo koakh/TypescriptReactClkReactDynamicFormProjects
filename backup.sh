@@ -6,16 +6,25 @@ FILE="$DIR/$DT.tgz"
 FILE_EXCLUDE=exclude.tag
 mkdir $DIR -p
 
-touch .bak/${FILE_EXCLUDE}/node_modules/${FILE_EXCLUDE}
-touch NewRollUpBase/my-app/node_modules/${FILE_EXCLUDE}
-touch NewRollUpBase/my-react-form-package/node_modules/${FILE_EXCLUDE}
-touch NewRollUpClkReactDynamicForm/clk-react-dynamic-form/node_modules/${FILE_EXCLUDE}
+# touch .bak/${FILE_EXCLUDE}/node_modules/${FILE_EXCLUDE}
+# touch NewRollUpBase/my-app/node_modules/${FILE_EXCLUDE}
+# touch NewRollUpBase/my-react-form-package/node_modules/${FILE_EXCLUDE}
+# touch NewRollUpClkReactDynamicForm/clk-react-dynamic-form/node_modules/${FILE_EXCLUDE}
+# touch NewRollUpClkReactDynamicForm/clk-react-dynamic-form-consumer-app/node_modules/${FILE_EXCLUDE}
+# touch ReactClkMicroPalFormToolsPoc/01-project-without-package/node_modules/${FILE_EXCLUDE}
+# touch ReactClkMicroPalFormToolsPoc/02-project-with-package/node_modules/${FILE_EXCLUDE}
+# touch ReactPublishReactComponentAsPackageToNpmPoc/dummy-counter/node_modules/${FILE_EXCLUDE}
+# touch ReactPublishReactComponentAsPackageToNpmPoc/javascript/node_modules/${FILE_EXCLUDE}
+# touch ReactPublishReactComponentAsPackageToNpmPoc/typescript/node_modules/${FILE_EXCLUDE}
+
+touch .otherProjectFiles/clk-react-dynamic-form-1.0.5-before-start-to-use-clk-repo/node_modules/${FILE_EXCLUDE}
+touch .otherProjectFiles/NewRollUpBase/my-app/node_modules/${FILE_EXCLUDE}
+touch .otherProjectFiles/NewRollUpBase/my-react-form-package/node_modules/${FILE_EXCLUDE}
+touch .otherProjectFiles/ReactClkMicroPalFormToolsPoc/node_modules/${FILE_EXCLUDE}
 touch NewRollUpClkReactDynamicForm/clk-react-dynamic-form-consumer-app/node_modules/${FILE_EXCLUDE}
-touch ReactClkMicroPalFormToolsPoc/01-project-without-package/node_modules/${FILE_EXCLUDE}
-touch ReactClkMicroPalFormToolsPoc/02-project-with-package/node_modules/${FILE_EXCLUDE}
-touch ReactPublishReactComponentAsPackageToNpmPoc/dummy-counter/node_modules/${FILE_EXCLUDE}
-touch ReactPublishReactComponentAsPackageToNpmPoc/javascript/node_modules/${FILE_EXCLUDE}
-touch ReactPublishReactComponentAsPackageToNpmPoc/typescript/node_modules/${FILE_EXCLUDE}
+touch NewRollUpClkReactDynamicForm/clk-react-dynamic-form/node_modules/${FILE_EXCLUDE}
+touch NewRollUpClkReactDynamicForm/node_modules/${FILE_EXCLUDE}
+touch NewRollUpClkReactDynamicForm/node_modules/${FILE_EXCLUDE}
 
 tar -zcvf $FILE \
 	--exclude-tag-all=${FILE_EXCLUDE} \
