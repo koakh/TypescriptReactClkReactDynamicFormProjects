@@ -124,8 +124,15 @@ or here `setGlobalError(null);`, this is the better place, after all renders are
 
 now launch the debugger with F5
 
+## TODO: Always use git scripts to work with dual projects git
 
+- Commit/Push All:	`pnpm git:sync "feature: added forms"`
+- Pull All: `pnpm git:pull`
+- Checkout Branch (All): `pnpm git:checkout main`
+- Sync Only Child: `pnpm git:sync "fix: child component" child`
+- Sync Only Root: `pnpm git:sync "chore: update root" root`
 
+## Build project to use with c3-frontend consumer
 
 ```
 # split #1
