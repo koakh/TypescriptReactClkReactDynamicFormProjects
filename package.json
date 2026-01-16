@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "git:checkout": "node git-sync.js checkout",
+    "git:pull": "node git-sync.js pull",
+    "git:sync": "node git-sync.js sync",
+    "git:sync-child": "node git-sync.js sync -- child",
+    "git:sync-root": "node git-sync.js sync -- root"
+  }
+}

@@ -3,5 +3,9 @@
     "**/node_modules": true,
     "NewRollUpClkReactDynamicForm//clk-react-dynamic-form-1.0.5-before-start-to-use-clk-repo": true,
     ".temp/": true
-  }
+  },
+  "pasteImage.basePath": "${currentFileDir}",
+  "pasteImage.path": "${currentFileDir}/attachments/",
+  "pasteImage.namePrefix": "attachments/",
+  "pasteImage.showFilePathConfirmInputBox": false,
 }

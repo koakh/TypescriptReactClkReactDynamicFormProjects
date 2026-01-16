@@ -17,7 +17,7 @@ warn this project is splitted in two distintict projects
 
 - /home/c3/TypescriptReactClkReactDynamicFormProjects/NewRollUpClkReactDynamicForm/clk-react-dynamic-form/.git/config
 
-## Requirments
+## Requirements
 
 ```shell
 $ node -v
@@ -27,7 +27,19 @@ v22.14.0
 ## Clone Projects
 
 ```shell
+# clone main project TypescriptReactClkReactDynamicFormProjects
 $ git clone https://github.com/koakh/TypescriptReactClkReactDynamicFormProjects.git
+# enter path
+$ cd TypescriptReactClkReactDynamicFormProjects/NewRollUpClkReactDynamicForm
+
+# clone clk-react-dynamic-form clk package project
+$ git clone https://mariomonteiro@bitbucket.org/criticallinksteam/clk-react-dynamic-form.git
+# back path
+$ cd ..
+$ tree -L 3
+├── NewRollUpClkReactDynamicForm
+│   ├── clk-react-dynamic-form
+│   ├── clk-react-dynamic-form-consumer-app
 ```
 
 ## open Vscode at
@@ -37,6 +49,85 @@ $ git clone https://github.com/koakh/TypescriptReactClkReactDynamicFormProjects.
 ## Start Dev Env
 
 ```shell
+# enter project path
+$ cd NewRollUpClkReactDynamicForm
+
+# install packages in pnpm workspace
+$ pnpm i
+Scope: all 2 workspace projects
+ WARN  1 deprecated subdependencies found: workbox-cacheable-response@6.6.0
+Packages: +1297
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 1298, reused 1293, downloaded 4, added 1297, done
+Done in 24.7s
+
+# term1
+$ pnpm --filter clk-react-dynamic-form watch
+rollup v3.29.4
+bundles src/index.ts → dist/index.js, dist/index.esm.js...
+created dist/index.js, dist/index.esm.js in 7s
+[2026-01-16 12:40:43] waiting for changes...
+
+# term2
+$ pnpm --filter clk-react-dynamic-form-consumer-app start
+Compiled successfully!
+
+You can now view clk-react-dynamic-form-consumer-app in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.122.243:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled successfully
+No issues found.
+```
+
+TODO: how to use package in backend and how to publicsh it
+
+## Add Breakpoints
+
+add breakpoint here `e.target.reset();`
+
+```ts
+  // OPT #2
+  const onSubmit = (data: any, e: any, tool: Tool) => {
+    // reset after form submit
+    e.target.reset();
+    // required react hook form reset to
+    reset();
+    // console.log(`onSubmit data: ${JSON.stringify(data)}`);
+    let payload = data;
+```
+
+or here `setGlobalError(null);`, this is the better place, after all renders are done, and form are ready to work
+
+```tsx
+          {/* reset button */}
+          <Button variant='contained'
+            type="reset"
+            sx={tool?.form?.properties?.styles?.button}
+            // onClick={reset as MouseEventHandler<HTMLButtonElement>}
+            onClick={() => {
+              // console.log(`tool.form?.elements: [${JSON.stringify(tool.form?.elements, undefined, 2)}]`);
+              // console.log(`${JSON.stringify(tool.form?.elements?.find(e => e.key === 'subject')?.defaultValue, undefined, 2)}`);
+              // clear previous errors
+              setGlobalError(null);
+              setGlobalErrors({});
+              reset();
+            }}
+          >
+            {getI18nValue(i18nFn, tool?.form?.i18n?.buttons?.reset, 'Reset')}
+          </Button>
+```
+
+now launch the debugger with F5
+
+
+
+
+```
 # split #1
 $ cd NewRollUpClkReactDynamicForm/clk-react-dynamic-form
 $ npm run build:publish:push
@@ -48,6 +139,17 @@ $ npm run dev:cleanup
 ```
 
 > sometimes after packages was rebuil, let consumer app rebuild and broswer refresh alone and it works
+
+
+![image](attachments/2026-01-16-15-05-11.png)
+
+![image](attachments/2026-01-16-15-06-19.png)
+
+all done debug works in consumer app and in package
+
+
+
+
 
 ## launch Debugger
 
@@ -293,32 +395,133 @@ $ pnpm --filter clk-react-dynamic-form watch
 $ pnpm --filter clk-react-dynamic-form-consumer-app start
 ```
 
-add breakpoint here `e.target.reset();`
 
-```ts
-  // OPT #2
-  const onSubmit = (data: any, e: any, tool: Tool) => {
-    // reset after form submit
-    e.target.reset();
-    // required react hook form reset to
-    reset();
-    // console.log(`onSubmit data: ${JSON.stringify(data)}`);
-    let payload = data;
+
+project #1
+
+$ find . -name *.map
+./dist/index.js.map
+./dist/index.esm.js.map
+./dist/interfaces/dynamic-form.interface.d.ts.map
+./dist/interfaces/dynamic-text-field-props.interface.d.ts.map
+./dist/interfaces/index.d.ts.map
+./dist/interfaces/tool.interface.d.ts.map
+./dist/interfaces/controller-render-props-field.interface.d.ts.map
+./dist/interfaces/prompt.interface.d.ts.map
+./dist/components/DynamicFormComponent.d.ts.map
+./dist/components/MyForm.d.ts.map
+./dist/enums/dynamic-form.enum.d.ts.map
+./dist/enums/index.d.ts.map
+./dist/types/dynamic-form.type.d.ts.map
+./dist/types/index.d.ts.map
+./dist/lib/dynamic-form.d.ts.map
+./dist/utils/main.d.ts.map
+./dist/utils/index.d.ts.map
+./dist/index.d.ts.map
+
+project #2
+
+"build": "clear && rollup -c"
+
+$ pnpm build
+src/index.ts → dist/index.js, dist/index.esm.js...
+created dist/index.js, dist/index.esm.js in 4.1s
+
+$ find . -name *.map
+
+no files found
+
+
+
+
+
+
+
+
+The reason your .map files are missing in Project #2 is that Rollup and TypeScript operate independently regarding sourcemaps. Even if your code compiles, you must explicitly tell both the TypeScript plugin (to generate maps for definitions) and the Rollup output (to generate maps for the bundles).
+
+
+1. Update tsconfig.json
+
+To get the .d.ts.map files (declaration maps) you see in Project #1, you must add declarationMap: true and sourceMap: true.
+
+add 
+
+```json
+{
+  "compilerOptions": {
+    "declarationMap": true, // <--- Add this for .d.ts.map files
+    "sourceMap": true, // <--- Add this for .js.map files
+  }
+}
 ```
 
-or here `setGlobalError(null);`
+ok now we have .map files
 
-```tsx
-          <Button variant='contained'
-            type="reset"
-            sx={tool?.form?.properties?.styles?.button}
-            // onClick={reset as MouseEventHandler<HTMLButtonElement>}
-            onClick={() => {
-              // console.log(`tool.form?.elements: [${JSON.stringify(tool.form?.elements, undefined, 2)}]`);
-              // console.log(`${JSON.stringify(tool.form?.elements?.find(e => e.key === 'subject')?.defaultValue, undefined, 2)}`);
-              // clear previous errors
-              setGlobalError(null);
-              setGlobalErrors({});
-              reset();
-            }}
 ```
+$ find . -name *.map
+./dist/interfaces/dynamic-form.interface.d.ts.map
+./dist/interfaces/dynamic-text-field-props.interface.d.ts.map
+./dist/interfaces/index.d.ts.map
+./dist/interfaces/tool.interface.d.ts.map
+./dist/interfaces/controller-render-props-field.interface.d.ts.map
+./dist/interfaces/prompt.interface.d.ts.map
+./dist/components/DynamicFormComponent.d.ts.map
+./dist/components/MyForm.d.ts.map
+./dist/enums/dynamic-form.enum.d.ts.map
+./dist/enums/index.d.ts.map
+./dist/types/dynamic-form.type.d.ts.map
+./dist/types/index.d.ts.map
+./dist/lib/dynamic-form.d.ts.map
+./dist/utils/main.d.ts.map
+./dist/utils/index.d.ts.map
+./dist/index.d.ts.map
+```
+
+but breakpoints doesn't work
+
+
+2. Update rollup.config.mjs
+
+To get the index.js.map and index.esm.js.map files, you must add sourcemap: true to each output object.
+
+add this
+
+```mjs
+export default {
+  output: [
+    {
+      file: 'dist/index.js',
+      format: 'cjs',
+      sourcemap: true, // <--- Add this
+    },
+    {
+      file: 'dist/index.esm.js',
+      format: 'esm',
+      sourcemap: true, // <--- Add this
+    },
+  ],
+  plugins: [
+    typescript({
+      sourceMap: true, // <--- Add this
+      declaration: true, // <--- Add this
+      declarationMap: true, // <--- Add this
+    }),
+  ]
+}
+```
+
+
+Why they disappeared:
+declarationMap: This generates the link between your .d.ts files and your .ts source code. Without it, VS Code can't "Go to Definition" into your library's actual source code.
+
+sourcemap: true (in output): This tells Rollup to take the mapping data provided by the TypeScript plugin and write it to the physical .map files in the dist folder.
+
+
+
+
+
+
+
+
+always pull/push both proejcts
