@@ -1,8 +1,9 @@
 // import { DynamicFormComponent, Tool } from '../.yalc/_clk-react-dynamic-form/dist';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './App.css';
 import { DynamicFormComponent, Tool } from 'clk-react-dynamic-form';
 
+const showRenderCount = true;
 // use constants outside of component
 const baseApiUrl = 'https://c3edu.online/backend/v1';
 // files prefixed with @ are not proccessed by `/home/c3/c3-backend/data/micropal/tools-src/encrypt-tools.sh` 
@@ -22,7 +23,14 @@ const headers = {
 function App() {
   const [tool, setTool] = useState<Tool>();
   const count = useRef(0);
-  // incerement render counter
+
+  // To see "True" renders vs Strict Mode lifecycle, 
+  // we can use an effect to track mounts.
+  useEffect(() => {
+    console.log("Component mounted or re-mounted (Strict Mode check), occurs in dev env only");
+  }, []);
+
+  // incrementing here shows every time the function runs
   count.current++;
 
   useEffect(() => {
@@ -41,25 +49,29 @@ function App() {
 
   // const buttonStyle = { borderRadius: '20px', marginTop: 10, padding: 0 };
 
-  const onSubmitHandle = (payload: any) => {
+  // Using useCallback ensures the function reference stays the same between renders. Without this, DynamicFormComponent might re-render every time App renders.
+  const onSubmitHandle = useCallback((payload: any) => {
     console.log(`consumer-app onSubmitHandle payload: [${JSON.stringify(payload, undefined, 2)}]`);
-  }
+  }, []);
 
-  const onCloseHandle = () => {
+  // Using useCallback ensures the function reference stays the same between renders. Without this, DynamicFormComponent might re-render every time App renders.
+  const onCloseHandle = useCallback(() => {
     console.log('consumer-app onCloseHandle');
-  }
+  }, []);
 
-  const i18nFn = (input: string, startWith = 'micropal:') => {
+  // Using useCallback ensures the function reference stays the same between renders. Without this, DynamicFormComponent might re-render every time App renders.
+  const i18nFn = useCallback((input: string, startWith = 'micropal:') => {
     const getResource = `[i18n]${input}[/i18n]`;
     // const getResource = undefined;
     return input.startsWith(startWith)
       ? getResource ? getResource : `invalid resource key '${input}'`
       : input;
-  }
+  }, []);
 
   return (
     <div className="App">
       <div className="main-container">
+        {(showRenderCount && count) && <p>App render count: {count.current}</p>}
         {/* NOTE: onCloseHandle={onCloseHandle} is optional, if omited close button doesn't appear in form */}
         {tool && <DynamicFormComponent tool={tool} i18nFn={i18nFn} onSubmitHandle={onSubmitHandle} onCloseHandle={onCloseHandle} />}
       </div>

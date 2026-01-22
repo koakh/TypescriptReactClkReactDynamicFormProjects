@@ -240,7 +240,7 @@ launch debugger with `F5` top open window
 
 ### now in Package clk-react-dynamic-form
 
-chane some visible thing to prove that c3-frontend will get changes from package
+change some visible thing to prove that c3-frontend will get changes from package
 
 - `NewRollUpClkReactDynamicForm/clk-react-dynamic-form/src/components/DynamicFormComponent.tsx`
 
