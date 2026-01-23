@@ -14,9 +14,6 @@ importers:
       react-dom:
         specifier: ^18.x
         version: 18.3.1(react@18.3.1)
-      react-hook-form:
-        specifier: ^7.x
-        version: 7.71.1(react@18.3.1)
     devDependencies:
       '@emotion/react':
         specifier: ^11.14.0
@@ -51,6 +48,9 @@ importers:
       install:
         specifier: ^0.13.0
         version: 0.13.0
+      react-hook-form:
+        specifier: ^7.71.1
+        version: 7.71.1(react@18.3.1)
       react-scripts:
         specifier: ^5.0.1
         version: 5.0.1(@babel/plugin-syntax-flow@7.28.6(@babel/core@7.28.6))(@babel/plugin-transform-react-jsx@7.28.6(@babel/core@7.28.6))(@types/babel__core@7.20.5)(eslint@8.57.1)(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3)

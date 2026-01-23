@@ -1,0 +1,17 @@
+{
+	"folders": [
+		// {
+		// 	"name": "ClkReactDynamicForm",
+		// 	"path": "NewRollUpClkReactDynamicForm/clk-react-dynamic-form"
+		// },
+		// {
+		// 	"name": "ClkReactDynamicFormConsumerApp",
+		// 	// Relative path to the nested git folder
+		// 	"path": "NewRollUpClkReactDynamicForm/clk-react-dynamic-form"
+		// }
+	],
+	"settings": {
+		// Your project-specific settings here
+		// "git.enabled": true
+	}
+}

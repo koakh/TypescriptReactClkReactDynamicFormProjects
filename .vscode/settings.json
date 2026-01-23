@@ -1,11 +1,17 @@
 {
   "files.exclude": {
     "**/node_modules": true,
+    ".otherProjectFiles": true,
     "NewRollUpClkReactDynamicForm//clk-react-dynamic-form-1.0.5-before-start-to-use-clk-repo": true,
     ".temp/": true
   },
   "pasteImage.basePath": "${currentFileDir}",
-  "pasteImage.path": "${currentFileDir}/attachments/",
+  "pasteImage.path": "${currentFileDir}/",
   "pasteImage.namePrefix": "attachments/",
   "pasteImage.showFilePathConfirmInputBox": false,
+  // Increase the depth to find submodules or nested git repos
+  "git.repositoryScanMaxDepth": 5,
+  // Automatically discover and open all repositories in the workspace
+  // "git.autofetch": true,
+  // "git.enableSmartCommit": true
 }

@@ -2,6 +2,8 @@
 
 - [NOTES](#notes)
   - [Links after restructure project from node 16 to node 22](#links-after-restructure-project-from-node-16-to-node-22)
+  - [Old Project Notes](#old-project-notes)
+  - [New Project changes dynamicEventHandlers and NEXT features](#new-project-changes-dynamiceventhandlers-and-next-features)
   - [Problems](#problems)
     - [old Node 16 Dependency Error: was project running in node 22, when in past we used node 16](#old-node-16-dependency-error-was-project-running-in-node-22-when-in-past-we-used-node-16)
       - [Gemini](#gemini)
@@ -19,6 +21,9 @@
       - [Update `rollup.config.mjs`](#update-rollupconfigmjs)
   - [Try to fix cache problems, when we change the package and nothing changes in c3-fronted](#try-to-fix-cache-problems-when-we-change-the-package-and-nothing-changes-in-c3-fronted)
   - [deprecated: Fix cache mistery /now this is not need, this problems are solved with `yalc link`](#deprecated-fix-cache-mistery-now-this-is-not-need-this-problems-are-solved-with-yalc-link)
+    - [Tripple Render](#tripple-render)
+      - [Fix 1: Move headers to a constant or useMemo to prevent reference changes](#fix-1-move-headers-to-a-constant-or-usememo-to-prevent-reference-changes)
+      - [Fix 2: Wrap handlers in useCallback so they don't change every render](#fix-2-wrap-handlers-in-usecallback-so-they-dont-change-every-render)
 
 ## Links after restructure project from node 16 to node 22
 
@@ -26,6 +31,26 @@
 
 - <https://gemini.google.com/app/d683bccd33375d04>
   big chat with `git-sync.js` and use package in c3-frontend with yalc
+
+## Old Project Notes
+
+- [Notes](.otherProjectFiles/ReactClkMicroPalFormToolsPoc/01-project-without-package/NOTES.md)
+
+  two of the mosty important links
+
+  - [Converting String Validation Functions in JSON to JavaScript](https://claude.ai/chat/b70c18df-1e57-438c-9203-3f9b4ae8c291)
+  - [Dynamically Inject React TextField Attributes](https://claude.ai/chat/c6302277-050e-4070-9153-1d096682ee34)
+    - NOTE: whole second part of the implementation "now added dynamicEventHandlers logic" is after first one
+
+## New Project changes dynamicEventHandlers and NEXT features
+
+- [RHF inputRef Replacement](https://chatgpt.com/c/697106f8-6178-8327-9da2-aa5cdfb81303)
+- [Why onBlur works for single select but not for multiple](https://chatgpt.com/c/69722dce-4fdc-8328-9da7-7cd04f9bd38e)
+  - This is by design, not a bug. onBlur only fires when the Select loses focus — and in multiple mode, it often never does until you click somewhere completely outside.
+  - Use onClose instead of onBlur (BEST for multi-select)
+    - NOTE: third part eventHandlers with chatGpt, code refactor, implement all dynamicEventHandlers elements
+
+- [TS2305: Module '"react-hook-form"' has no exported member 'useWatch'. and TS2304: Cannot find name 'originalHandlers'.](https://gemini.google.com/app/a49acf16deac0b33)
 
 ## Problems
 
@@ -324,3 +349,62 @@ $ yalc add --pure clk-react-dynamic-form
 ```
 
 > The `--pure` flag ensures it doesn't touch your package.json, just the local files
+
+### Tripple Render
+
+- <https://gemini.google.com/app/6c9c1d8085016fb1>
+
+use to enable render count
+
+```tsx
+const showRenderCount = true;
+```
+
+first fix the problem
+
+Here is the corrected version using useCallback and useMemo to stabilize the component:
+
+- useCallback: Used for onSubmitHandle, onCloseHandle, and i18nFn. This ensures that when the component re-renders (due to setTool), the props passed to DynamicFormComponent remain referentially identical.
+- Strict Mode Check: If you still see "2" or "3" immediately on load, check your main.tsx or index.tsx. If you remove React.StrictMode, you will see the count drop, but I recommend keeping Strict Mode on as it helps catch memory leaks in your useEffect.
+
+#### Fix 1: Move headers to a constant or useMemo to prevent reference changes
+
+```tsx
+// Move headers to a constant or useMemo to prevent reference changes
+const HEADERS = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${accessToken}`
+};
+```
+
+#### Fix 2: Wrap handlers in useCallback so they don't change every render
+
+```tsx
+  const onSubmitHandle = useCallback((payload: any) => {
+    console.log(`consumer-app onSubmitHandle payload: [${JSON.stringify(payload, undefined, 2)}]`);
+  }, []);
+
+  const onCloseHandle = useCallback(() => {
+    console.log('consumer-app onCloseHandle');
+  }, []);
+
+  const i18nFn = useCallback((input: string, startWith = 'micropal:') => {
+    const getResource = `[i18n]${input}[/i18n]`;
+    // const getResource = undefined;
+    return input.startsWith(startWith)
+      ? getResource ? getResource : `invalid resource key '${input}'`
+      : input;
+  }, []);
+```
+
+Actually, your code is working perfectly. The "triple render" is a feature of the development environment, not a bug in your logic.
+
+- Render 1 & 2: Are React making sure your component is robust.
+- Render 3: Is the necessary update to show the data you fetched.
+
+In a Production Build (running npm run build), Strict Mode is automatically disabled, and you would only see 2 renders.
+
+> NOTE: in production c3-frontend we only have one render now :)
+
+![image](attachments/2026-01-19-12-59-23.png)

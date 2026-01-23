@@ -54,6 +54,13 @@ $ tree -L 3
 ├── NewRollUpClkReactDynamicForm
 │   ├── clk-react-dynamic-form
 │   ├── clk-react-dynamic-form-consumer-app
+
+# Navigate into the workspace root and install. This will link all the packages (including rollup and react-hook-form) correctly across your library and your consumer app.
+$ cd ~/TypescriptReactClkReactDynamicFormProjects/NewRollUpClkReactDynamicForm
+$ pnpm i
+# Verify the react-hook-form Version
+# Once the install finishes, let's verify exactly what version the workspace has decided to use. Run this from the same folder:   
+$ pnpm list react-hook-form --recursive
 ```
 
 ## open Vscode at
@@ -65,18 +72,6 @@ $ tree -L 3
 ### Start Dev Env
 
 ```shell
-# enter project path
-$ cd NewRollUpClkReactDynamicForm
-
-# install packages in pnpm workspace
-$ pnpm i
-Scope: all 2 workspace projects
- WARN  1 deprecated subdependencies found: workbox-cacheable-response@6.6.0
-Packages: +1297
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 1298, reused 1293, downloaded 4, added 1297, done
-Done in 24.7s
-
 # term1
 $ pnpm --filter clk-react-dynamic-form watch
 rollup v3.29.4
