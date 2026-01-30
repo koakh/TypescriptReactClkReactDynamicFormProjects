@@ -32,6 +32,10 @@
 - <https://gemini.google.com/app/d683bccd33375d04>
   big chat with `git-sync.js` and use package in c3-frontend with yalc
 
+- [Convert "ObjectId(${value.collection})" to TypeScript ObjectId String to Mongoose](https://gemini.google.com/app/4c0531beafcf3c0c)
+
+- [Material UI Autocomplete Label Display](https://gemini.google.com/app/61195c9429ecc27c)
+
 ## Old Project Notes
 
 - [Notes](.otherProjectFiles/ReactClkMicroPalFormToolsPoc/01-project-without-package/NOTES.md)
