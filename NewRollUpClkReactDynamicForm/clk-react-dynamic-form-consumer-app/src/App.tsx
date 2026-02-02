@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './App.css';
 import { DynamicFormComponent, Tool } from 'clk-react-dynamic-form';
 
-const showRenderCount = true;
+const showRenderCount = false;
 // use constants outside of component
 const baseApiUrl = 'https://c3edu.online/backend/v1';
 // files prefixed with @ are not proccessed by `/home/c3/c3-backend/data/micropal/tools-src/encrypt-tools.sh` 

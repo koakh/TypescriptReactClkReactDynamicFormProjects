@@ -56,6 +56,8 @@
 
 - [TS2305: Module '"react-hook-form"' has no exported member 'useWatch'. and TS2304: Cannot find name 'originalHandlers'.](https://gemini.google.com/app/a49acf16deac0b33)
 
+- [Global SX Styling and Element Styling Sx](https://gemini.google.com/app/ced1f7fc12194005)
+
 ## Problems
 
 ### old Node 16 Dependency Error: was project running in node 22, when in past we used node 16

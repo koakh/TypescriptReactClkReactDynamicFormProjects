@@ -12,6 +12,7 @@
   - [Always use git scripts to work with dual projects git](#always-use-git-scripts-to-work-with-dual-projects-git)
   - [Build and use package with c3-frontend consumer](#build-and-use-package-with-c3-frontend-consumer)
     - [c3-frontend](#c3-frontend)
+      - [To use new package code/updated c3-frontend](#to-use-new-package-codeupdated-c3-frontend)
     - [now in Package clk-react-dynamic-form](#now-in-package-clk-react-dynamic-form)
 
 ## Dual Repo Notes
@@ -232,6 +233,20 @@ $ npm run start:debug
 launch debugger with `F5` top open window
 
 > to debug the package always ue the `clk-react-dynamic-form-consumer-app`
+
+#### To use new package code/updated c3-frontend
+
+just publish it with, and f 
+
+```shell
+$ pnpm build:publish:push
+src/index.ts → dist/index.esm.js...
+created dist/index.esm.js in 4.9s
+clk-react-dynamic-form@1.0.11 published in store.
+clk-react-dynamic-form@1.0.11 published in store.
+Pushing clk-react-dynamic-form@1.0.11 in /home/c3/c3-frontend
+Package clk-react-dynamic-form@1.0.11 linked ==> /home/c3/c3-frontend/node_modules/clk-react-dynamic-form
+```
 
 ### now in Package clk-react-dynamic-form
 
