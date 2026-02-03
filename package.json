@@ -4,6 +4,8 @@
     "git:pull": "node git-sync.js pull",
     "git:sync": "node git-sync.js sync",
     "git:sync-child": "node git-sync.js sync -- child",
-    "git:sync-root": "node git-sync.js sync -- root"
+    "git:sync-root": "node git-sync.js sync -- root",
+    "start:dev": "pnpm --filter clk-react-dynamic-form watch",
+    "start:app": "pnpm --filter clk-react-dynamic-form-consumer-app start"
   }
 }

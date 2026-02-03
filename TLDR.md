@@ -75,6 +75,8 @@ $ pnpm list react-hook-form --recursive
 ```shell
 # term1
 $ pnpm --filter clk-react-dynamic-form watch
+# or
+$ pnpm start:dev
 rollup v3.29.4
 bundles src/index.ts → dist/index.js, dist/index.esm.js...
 created dist/index.js, dist/index.esm.js in 7s
@@ -82,6 +84,8 @@ created dist/index.js, dist/index.esm.js in 7s
 
 # term2
 $ pnpm --filter clk-react-dynamic-form-consumer-app start
+# or
+$ pnpm start:app
 Compiled successfully!
 
 You can now view clk-react-dynamic-form-consumer-app in the browser.
@@ -236,9 +240,10 @@ launch debugger with `F5` top open window
 
 #### To use new package code/updated c3-frontend
 
-just publish it with, and f 
+just publish it with
 
 ```shell
+$ cd NewRollUpClkReactDynamicForm/clk-react-dynamic-form
 $ pnpm build:publish:push
 src/index.ts → dist/index.esm.js...
 created dist/index.esm.js in 4.9s
