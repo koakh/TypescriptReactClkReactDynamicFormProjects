@@ -24,6 +24,7 @@
     - [Tripple Render](#tripple-render)
       - [Fix 1: Move headers to a constant or useMemo to prevent reference changes](#fix-1-move-headers-to-a-constant-or-usememo-to-prevent-reference-changes)
       - [Fix 2: Wrap handlers in useCallback so they don't change every render](#fix-2-wrap-handlers-in-usecallback-so-they-dont-change-every-render)
+  - [Blocked by CORS policy](#blocked-by-cors-policy)
 
 ## Links after restructure project from node 16 to node 22
 
@@ -414,3 +415,9 @@ In a Production Build (running npm run build), Strict Mode is automatically disa
 > NOTE: in production c3-frontend we only have one render now :)
 
 ![image](attachments/2026-01-19-12-59-23.png)
+
+## Blocked by CORS policy
+
+Access to fetch at 'https://c3edu.online/backend/v1/micropal/tools/tool/summarization' from origin 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+
+fix: connect to c3-backend in debug mode, not in container mode, or add CORS urls to env vars
