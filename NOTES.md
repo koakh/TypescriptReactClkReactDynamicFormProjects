@@ -59,6 +59,9 @@
 
 - [Global SX Styling and Element Styling Sx](https://gemini.google.com/app/ced1f7fc12194005)
 
+- [MUI Select Scrollbar Visibility](https://gemini.google.com/app/5b30afb365651832)
+  fixed with sx object -> find: `Global scrollbar styling for this specific menu`
+
 ## Problems
 
 ### old Node 16 Dependency Error: was project running in node 22, when in past we used node 16
