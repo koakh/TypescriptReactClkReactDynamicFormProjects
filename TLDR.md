@@ -57,7 +57,7 @@ $ tree -L 3
 │   ├── clk-react-dynamic-form-consumer-app
 
 # Navigate into the workspace root and install. This will link all the packages (including rollup and react-hook-form) correctly across your library and your consumer app.
-$ cd ~/TypescriptReactClkReactDynamicFormProjects/NewRollUpClkReactDynamicForm
+$ cd ../TypescriptReactClkReactDynamicFormProjects/NewRollUpClkReactDynamicForm/
 $ pnpm i
 # Verify the react-hook-form Version
 # Once the install finishes, let's verify exactly what version the workspace has decided to use. Run this from the same folder:   
@@ -68,24 +68,26 @@ $ pnpm list react-hook-form --recursive
 
 - `/home/c3/TypescriptReactClkReactDynamicFormProjects`
 
+> the path that have `.vscode/launch.json`, `AGENTS.md`, `TLDR.md` etc
+
 ## Dev Environment
 
 ### Start Dev Env
 
 ```shell
 # term1
-$ pnpm --filter clk-react-dynamic-form watch
-# or
 $ pnpm start:dev
+# or
+$ pnpm --filter clk-react-dynamic-form watch
 rollup v3.29.4
 bundles src/index.ts → dist/index.js, dist/index.esm.js...
 created dist/index.js, dist/index.esm.js in 7s
 [2026-01-16 12:40:43] waiting for changes...
 
 # term2
-$ pnpm --filter clk-react-dynamic-form-consumer-app start
-# or
 $ pnpm start:app
+# or
+$ pnpm --filter clk-react-dynamic-form-consumer-app start
 Compiled successfully!
 
 You can now view clk-react-dynamic-form-consumer-app in the browser.
