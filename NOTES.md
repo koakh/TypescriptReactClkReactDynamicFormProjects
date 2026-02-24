@@ -25,6 +25,7 @@
       - [Fix 1: Move headers to a constant or useMemo to prevent reference changes](#fix-1-move-headers-to-a-constant-or-usememo-to-prevent-reference-changes)
       - [Fix 2: Wrap handlers in useCallback so they don't change every render](#fix-2-wrap-handlers-in-usecallback-so-they-dont-change-every-render)
   - [Blocked by CORS policy](#blocked-by-cors-policy)
+  - [Latest Closed Links](#latest-closed-links)
 
 ## Links after restructure project from node 16 to node 22
 
