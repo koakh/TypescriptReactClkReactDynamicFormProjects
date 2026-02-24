@@ -424,3 +424,17 @@ In a Production Build (running npm run build), Strict Mode is automatically disa
 Access to fetch at 'https://c3edu.online/backend/v1/micropal/tools/tool/summarization' from origin 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
 
 fix: connect to c3-backend in debug mode, not in container mode, or add CORS urls to env vars
+
+## Latest Closed Links
+
+- [MongoDB Regex & JSON Parsing: The "Forced Structure" Solution](https://gemini.google.com/app/44ee92fa9192ee5b)
+
+This thread chronicles the iterative development of a robust TypeScript parser designed to extract MongoDB query parameters from a custom query:// string format.
+
+Initially struggling with nested braces in complex $and filters, the conversation explores the limitations of standard Regex quantifiers when dealing with non-regular languages. The final solution implements a "KISS" (Keep It Simple, Stupid) approach by enforcing a mandatory structure: find({filter}, {projection}).sort({sort}).
+
+Key Technical Highlights:
+
+- Non-Greedy Capture Groups: Utilizing [\s\S]*? to isolate arguments without over-consuming nested objects.
+- Unquoted Key Resolution: Implementing a regex-based Key Quoter to transform Mongo-shell style objects (e.g., field: -1) into strict JSON-compliant strings for JSON.parse.
+- Structural Anchoring: Using specific function delimiters like }, { and ).sort({ as reliable split points to ensure 100% extraction accuracy for filter, projection, and sort objects.
