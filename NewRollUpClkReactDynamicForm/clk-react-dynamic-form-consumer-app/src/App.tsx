@@ -3,6 +3,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './App.css';
 import { DynamicFormComponent, Tool } from 'clk-react-dynamic-form';
 
+const baseUrl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+console.log(`baseUrl: [${baseUrl}]`);
+
 const showRenderCount = false;
 // use constants outside of component
 const baseApiUrl = 'https://c3edu.online/backend/v1';
