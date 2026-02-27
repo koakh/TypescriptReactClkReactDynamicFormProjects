@@ -242,6 +242,8 @@ launch debugger with `F5` top open window
 
 #### To use new package code/updated c3-frontend
 
+UPDATE: seems that this is not need, we have working changing here and debug in consumer app and c3-frontend at same time withou issues at all
+
 just publish it with
 
 ```shell
