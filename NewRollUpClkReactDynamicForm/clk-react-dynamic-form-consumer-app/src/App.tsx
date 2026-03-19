@@ -4,21 +4,22 @@ import './App.css';
 import { DynamicFormComponent, Tool } from 'clk-react-dynamic-form';
 
 const baseUrl = `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
-console.log(`baseUrl: [${baseUrl}]`);
+// console.log(`baseUrl: [${baseUrl}]`);
+
+export const baseApiUrl = 'https://c3edu.online/backend/v1';
 
 const showRenderCount = false;
 // use constants outside of component
-const baseApiUrl = 'https://c3edu.online/backend/v1';
 // files prefixed with @ are not proccessed by `/home/c3/c3-backend/data/micropal/tools-src/encrypt-tools.sh` 
 // TODO: revert to files to @
 // const fileKey = '@dev-elements-demo';
-const fileKey = 'dev-elements-demo';
+// const fileKey = 'dev-elements-demo';
 // const fileKey = 'lesson-planner';
 // const fileKey = 'proof-reader';
 // const fileKey = 'quiz-generator';
 // const fileKey = 'rag';
 // const fileKey = 'study-plan-generator';
-// const fileKey = 'summarization';
+const fileKey = 'summarization';
 // const fileKey = 'topic-explainer';
 // const fileKey = 'translator';
 const apiEndpointGetToolId = `${baseApiUrl}/micropal/tools/tool/${fileKey}`;

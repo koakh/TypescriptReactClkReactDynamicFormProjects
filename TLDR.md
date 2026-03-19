@@ -167,7 +167,7 @@ $ git checkout develop
 $ npm i --legacy-peer-deps
 ```
 
-now in frontend
+now in c3-frontend
 
 ```shell
 # yalc add clk-react-dynamic-form@1.0.11
