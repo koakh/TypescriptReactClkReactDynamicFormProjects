@@ -158,6 +158,8 @@ all done debug works in **consumer app** and in **package**
 
 ## Build and use package with c3-frontend consumer
 
+> NOTE: seems that this only work after a FRESH project checkout
+
 ### c3-frontend
 
 ```shell

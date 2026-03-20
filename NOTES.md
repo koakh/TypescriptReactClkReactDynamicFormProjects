@@ -26,6 +26,10 @@
       - [Fix 2: Wrap handlers in useCallback so they don't change every render](#fix-2-wrap-handlers-in-usecallback-so-they-dont-change-every-render)
   - [Blocked by CORS policy](#blocked-by-cors-policy)
   - [Latest Closed Links](#latest-closed-links)
+  - [Fix Input Text value in i18n](#fix-input-text-value-in-i18n)
+    - [The Fix: Don't Mutate, use defaultValues](#the-fix-dont-mutate-use-defaultvalues)
+      - [Step 1: Create a helper to extract translated defaults](#step-1-create-a-helper-to-extract-translated-defaults)
+      - [Step 2: Update your useForm call](#step-2-update-your-useform-call)
 
 ## Links after restructure project from node 16 to node 22
 
@@ -439,3 +443,51 @@ Key Technical Highlights:
 - Non-Greedy Capture Groups: Utilizing [\s\S]*? to isolate arguments without over-consuming nested objects.
 - Unquoted Key Resolution: Implementing a regex-based Key Quoter to transform Mongo-shell style objects (e.g., field: -1) into strict JSON-compliant strings for JSON.parse.
 - Structural Anchoring: Using specific function delimiters like }, { and ).sort({ as reliable split points to ensure 100% extraction accuracy for filter, projection, and sort objects.
+
+## Fix Input Text value in i18n
+
+- [Mastering i18n Sync and Hook Integrity in Dynamic Forms](https://gemini.google.com/app/9e0e293f49147726)
+
+Description: This technical deep dive explores the complexities of synchronizing translated default values within a dynamic form powered by **React Hook Form** and **Material UI**.
+
+The discussion centers on a common "race condition" where RHF initializes form state before i18n translations are applied, leading to "stubborn" UI fields that display raw resource keys. We analyze the "Rules of Hooks" error caused by calling `useEffect` within iterative generator functions and resolve it by transforming static functions into proper Functional Components. The thread concludes with architectural strategies—such as centralized `defaultValues` memoization and controlled input patterns—to ensure consistent, error-free form behavior across multiple consumer applications and different build environments.
+
+commit fixes <https://bitbucket.org/criticallinksteam/clk-react-dynamic-form/commits/c7c241752e7b80056c8c594c1018c976e4025bc5>
+
+### The Fix: Don't Mutate, use defaultValues
+
+To make this work 100% of the time across all apps, you should **move the translation logic out of the render loop and into the `useForm` initialization**.
+
+In your DynamicFormComponent (inside the package), you should calculate the translated defaults once and pass them to useForm.
+
+#### Step 1: Create a helper to extract translated defaults
+
+```ts
+const getTranslatedDefaultValues = (elements: DynamicFormElement[], i18nFn: any) => {
+  const defaults: any = {};
+  elements.forEach(e => {
+    if (e.defaultValue) {
+      // Translate it here
+      defaults[e.key] = e.defaultValue.toString().startsWith('micropal:')
+        ? i18nFn(e.defaultValue, 'micropal:')
+        : e.defaultValue;
+    }
+  });
+  return defaults;
+};
+```
+
+#### Step 2: Update your useForm call
+
+Inside the main component of your package where you call useForm:
+
+```ts
+// Inside your DynamicFormComponent
+const translatedDefaults = useMemo(() => 
+  getTranslatedDefaultValues(tool.dynamicForm.elements, i18nFn), 
+[tool, i18nFn]);
+
+const { register, control, handleSubmit, watch, setValue, getValues, trigger, formState: { errors } } = useForm({
+  defaultValues: translatedDefaults // <--- THIS IS THE KEY
+});
+```
